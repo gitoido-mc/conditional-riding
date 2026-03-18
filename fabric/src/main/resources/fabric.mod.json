@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "conditional_riding",
+  "version": "${version}",
+  "name": "Cobblemon Conditional Riding",
+  "description": "Allows to configure ability to ride pokemans via simple config!",
+  "authors": [
+    "Gito"
+  ],
+  "license": "GPLv3",
+  "icon": "assets/example/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "value": "lol.gito.conditionalRiding.fabric.ConditionalRidingFabric",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "mixins": [
+    "conditional_riding.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "1.21.1",
+    "cobblemon": ">=1.7.3 <1.8.0"
+  }
+}

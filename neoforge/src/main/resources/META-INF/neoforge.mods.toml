@@ -1,0 +1,38 @@
+modLoader="kotlinforforge"
+loaderVersion="[5.10,)"
+#issueTrackerURL = "A valid URL to your issue tracker where people can open bug tickets"
+license = "MIT License"
+
+[[mods]]
+modId = "conditional_riding"
+version = "${version}"
+displayName = "Cobblemon Conditional Riding"
+authors = "Gito"
+description = '''
+Allows to configure ability to ride pokemans via simple config!
+'''
+#logoFile = ""
+
+[[mixins]]
+config = "conditional_riding.mixins.json"
+
+[[dependencies.conditional_riding]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.21.1]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.conditional_riding]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[21.1.182,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.conditional_riding]]
+modId = "cobblemon"
+mandatory = true
+versionRange = "[1.7.3,)"
+ordering = "AFTER"
+side = "BOTH"
