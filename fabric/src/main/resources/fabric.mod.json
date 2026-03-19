@@ -7,8 +7,12 @@
   "authors": [
     "Gito"
   ],
-  "license": "GPLv3",
-  "icon": "assets/example/icon.png",
+  "contact": {
+    "issues": "https://github.com/gitoido-mc/conditional-riding/issues",
+    "sources": "https://github.com/gitoido-mc/conditional-riding"
+  },
+  "license": "GPL-3.0-only",
+  "icon": "assets/conditional_riding/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -18,9 +22,6 @@
       }
     ]
   },
-  "mixins": [
-    "conditional_riding.mixins.json"
-  ],
   "depends": {
     "minecraft": "1.21.1",
     "cobblemon": ">=1.7.3 <1.8.0"

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026. gitoido-mc
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/conditional-riding/blob/main/LICENSE.
+ */
+
 package lol.gito.conditionalRiding.common.serialization
 
 import com.cobblemon.mod.common.api.interaction.InteractionEffect
@@ -5,9 +12,7 @@ import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.adapters.RequirementAdapter
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
-import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.requirements.AdvancementRequirement
-import com.cobblemon.mod.common.pokemon.requirements.AnyRequirement
 import com.cobblemon.mod.common.pokemon.requirements.AreaRequirement
 import com.cobblemon.mod.common.pokemon.requirements.BiomeRequirement
 import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
@@ -42,6 +47,9 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import lol.gito.conditionalRiding.common.ConditionalRiding
+import lol.gito.conditionalRiding.common.requirement.CosmeticItemRequirement
+import lol.gito.conditionalRiding.common.requirement.LuckPermsNodeRequirement
+import lol.gito.conditionalRiding.common.requirement.MinimalHpPercentRequirement
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -73,11 +81,13 @@ object RidingRequirementAdapter : RequirementAdapter {
         this.registerType(MoonPhaseRequirement.ADAPTER_VARIANT, MoonPhaseRequirement::class)
         this.registerType(BlocksTraveledRequirement.ADAPTER_VARIANT, BlocksTraveledRequirement::class)
         this.registerType(StructureRequirement.ADAPTER_VARIANT, StructureRequirement::class)
-        this.registerType(AnyRequirement.ADAPTER_VARIANT, AnyRequirement::class)
         this.registerType(PropertyRangeRequirement.ADAPTER_VARIANT, PropertyRangeRequirement::class)
         this.registerType(AdvancementRequirement.ADAPTER_VARIANT, AdvancementRequirement::class)
         this.registerType(OwnerHoldsItemRequirement.ADAPTER_VARIANT, OwnerHoldsItemRequirement::class)
         this.registerType(ChanceRequirement.ADAPTER_VARIANT, ChanceRequirement::class)
+        this.registerType(LuckPermsNodeRequirement.ADAPTER_VARIANT, LuckPermsNodeRequirement::class)
+        this.registerType(CosmeticItemRequirement.ADAPTER_VARIANT, CosmeticItemRequirement::class)
+        this.registerType(MinimalHpPercentRequirement.ADAPTER_VARIANT, MinimalHpPercentRequirement::class)
     }
 
     val gson: Gson by lazy {

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026. gitoido-mc
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/conditional-riding/blob/main/LICENSE.
+ */
+
 plugins {
     id("com.gradleup.shadow")
     id("dev.architectury.loom")
@@ -12,10 +19,6 @@ architectury {
 loom {
     enableTransitiveAccessWideners.set(true)
     silentMojangMappingsLicense()
-
-    mixin {
-        defaultRefmapName.set("mixins.${project.name}.refmap.json")
-    }
 
     val clientConfig = runConfigs.getByName("client")
     clientConfig.runDir = "runClient"
@@ -44,23 +47,10 @@ dependencies {
     implementation(project(":common", configuration = "namedElements"))
     "developmentFabric"(project(":common", configuration = "namedElements"))
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${property("junit_version")}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
 }
 
 tasks {
-    test {
-        useJUnitPlatform()
-    }
-
-    val copyMixin by registering(Copy::class) {
-        from(project(":common").file("src/resources/${project.property("mod_id")}.mixins.json"))
-        into(file("src/resources"))
-    }
-
     processResources {
-        mustRunAfter(copyMixin)
         inputs.property("version", project.version)
 
         filesMatching("fabric.mod.json") {
@@ -82,6 +72,11 @@ tasks {
     remapJar {
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+    }
+
+    remapSourcesJar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveVersion.set("${rootProject.version}")
     }

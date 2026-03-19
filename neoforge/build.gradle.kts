@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026. gitoido-mc
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/conditional-riding/blob/main/LICENSE.
+ */
+
 plugins {
     id("com.gradleup.shadow")
     id("dev.architectury.loom")
@@ -61,17 +68,7 @@ dependencies {
 }
 
 tasks {
-    test {
-        useJUnitPlatform()
-    }
-
-    val copyMixin by registering(Copy::class) {
-        from(project(":common").file("src/resources/${project.property("mod_id")}.mixins.json"))
-        into(file("src/resources"))
-    }
-
     processResources {
-        mustRunAfter(copyMixin)
         inputs.property("version", project.version)
 
         filesMatching("META-INF/neoforge.mods.toml") {
@@ -94,6 +91,11 @@ tasks {
     remapJar {
         dependsOn(shadowJar)
         inputFile.set(shadowJar.flatMap { it.archiveFile })
+        archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
+        archiveVersion.set("${rootProject.version}")
+    }
+
+    remapSourcesJar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")
         archiveVersion.set("${rootProject.version}")
     }

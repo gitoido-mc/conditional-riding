@@ -1,6 +1,7 @@
 {
   "pack": {
-    "description": "Example Mod resources",
-    "pack_format": 7
+    "description": "Conditional Riding resources",
+    "pack_format": 48,
+    "supported_formats": {"min_inclusive": 36, "max_inclusive": 48}
   }
 }

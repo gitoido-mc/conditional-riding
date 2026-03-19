@@ -1,7 +1,7 @@
 modLoader="kotlinforforge"
 loaderVersion="[5.10,)"
-#issueTrackerURL = "A valid URL to your issue tracker where people can open bug tickets"
-license = "MIT License"
+issueTrackerURL = "https://github.com/gitoido-mc/conditional-riding/issues"
+license='''GPL-3.0-only'''
 
 [[mods]]
 modId = "conditional_riding"
@@ -11,10 +11,7 @@ authors = "Gito"
 description = '''
 Allows to configure ability to ride pokemans via simple config!
 '''
-#logoFile = ""
-
-[[mixins]]
-config = "conditional_riding.mixins.json"
+logoFile = "assets/conditional_riding/icon.png"
 
 [[dependencies.conditional_riding]]
 modId = "minecraft"

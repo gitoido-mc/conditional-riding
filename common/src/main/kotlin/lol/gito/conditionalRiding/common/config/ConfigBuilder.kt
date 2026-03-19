@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026. gitoido-mc
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/conditional-riding/blob/main/LICENSE.
+ */
+
 package lol.gito.conditionalRiding.common.config
 
 import lol.gito.conditionalRiding.common.ConditionalRiding.LOGGER
@@ -29,7 +36,7 @@ class ConfigBuilder private constructor(private val path: String) {
             try {
                 val fileReader = FileReader(configFile)
                 config = RidingRequirementAdapter.gson.fromJson(fileReader, ConditionalRidingConfig::class.java)
-                LOGGER.info("Found ${config.rulesets!!.count()} cobblemon riding rulesets")
+                LOGGER.info("Found ${config.rulesets.count()} cobblemon riding rulesets")
                 fileReader.close()
             } catch (e: Exception) {
                 LOGGER.error("Error reading config file: %s, loading default".format(e.cause?.message))
@@ -41,7 +48,7 @@ class ConfigBuilder private constructor(private val path: String) {
             if (!configFile.exists()) {
                 configFile.createNewFile()
                 val pw = PrintWriter(configFile)
-                RidingRequirementAdapter.gson.toJson(ConditionalRidingConfig(debug = false, emptyMap()), pw)
+                RidingRequirementAdapter.gson.toJson(ConditionalRidingConfig(), pw)
                 pw.close()
             }
         } catch (e: Exception) {

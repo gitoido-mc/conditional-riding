@@ -1,46 +1,26 @@
+/*
+ * Copyright (c) 2026. gitoido-mc
+ * This Source Code Form is subject to the terms of the GNU General Public License v3.0.
+ * If a copy of the GNU General Public License v3.0 was not distributed with this file,
+ * you can obtain one at https://github.com/gitoido-mc/conditional-riding/blob/main/LICENSE.
+ */
+
 package lol.gito.conditionalRiding.neoforge
 
-import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.ConditionalRiding.MOD_ID
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.packs.PackType
-import net.minecraft.server.packs.resources.PreparableReloadListener
+import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
-import net.neoforged.neoforge.common.NeoForge
-import net.neoforged.neoforge.event.AddReloadListenerEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 @Mod(MOD_ID)
 object ConditionalRidingNeoForge : ConditionalRidingImplementation {
-    private val reloadableResources = arrayListOf<PreparableReloadListener>()
-
     init {
         with(MOD_BUS) {
-            ConditionalRiding.preInitialize(this@ConditionalRidingNeoForge)
             addListener { _: FMLCommonSetupEvent ->
-                ConditionalRiding.initialize()
+                ConditionalRiding.initialize(this@ConditionalRidingNeoForge)
             }
         }
-
-        with(NeoForge.EVENT_BUS) {
-            addListener(::onReload)
-        }
-    }
-
-    override fun registerResourceReloader(
-        identifier: ResourceLocation,
-        reloader: PreparableReloadListener,
-        type: PackType,
-        dependencies: Collection<ResourceLocation>
-    ) {
-        if (type == PackType.SERVER_DATA) {
-            this.reloadableResources += reloader
-        }
-    }
-
-    private fun onReload(e: AddReloadListenerEvent) {
-        this.reloadableResources.forEach(e::addListener)
     }
 }

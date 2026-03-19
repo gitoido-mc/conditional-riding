@@ -5,6 +5,12 @@
  * you can obtain one at https://github.com/gitoido-mc/conditional-riding/blob/main/LICENSE.
  */
 
-package lol.gito.conditionalRiding.common.api
+package lol.gito.conditionalRiding.common.config
 
-interface ConditionalRidingImplementation
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
+
+data class Ruleset(
+    val enabled: Boolean? = true,
+    val message: String? = null,
+    val rules: List<Requirement> = emptyList()
+)
