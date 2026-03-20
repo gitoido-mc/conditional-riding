@@ -14,6 +14,7 @@ env:
 
 jobs:
   build:
+    name: "Build mod jars"
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -48,10 +49,13 @@ jobs:
         with:
           name: artifacts
           path: |
-            fabric/build/libs/${{ env.project_name }}-fabric-${{ steps.version.outputs.MOD_VERSION }}.jar
-            neoforge/build/libs/${{ env.project_name }}-neoforge-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
+            fabric/build/libs/conditional_riding-fabric-${{ steps.version.outputs.MOD_VERSION }}.jar
+            fabric/build/libs/conditional_riding-fabric-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
+            neoforge/build/libs/conditional_riding-neoforge-${{ steps.version.outputs.MOD_VERSION }}.jar
+            neoforge/build/libs/conditional_riding-neoforge-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
 
   publish:
+    name: "Publish artifacts on platforms"
     needs: build
     runs-on: ubuntu-22.04
     strategy:
@@ -65,7 +69,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: artifacts
-          path: build/libs/
       - name: Display structure of downloaded files
         if: github.event_name == 'workflow_dispatch'
         run: ls -R
@@ -79,8 +82,8 @@ jobs:
           loaders: ${{ matrix.loader }}
 
           files: |
-            build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
-            build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar 
+            ${{ matrix.loader }}/build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
+            ${{ matrix.loader }}/build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar
 
           version: "${{ env.cobblemon }}_${{ needs.build.outputs.version }}"
           version-type: release
