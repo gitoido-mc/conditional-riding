@@ -48,7 +48,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.requirement.CosmeticItemRequirement
-import lol.gito.conditionalRiding.common.requirement.LuckPermsNodeRequirement
+import lol.gito.conditionalRiding.common.requirement.PermissionNodeRequirement
 import lol.gito.conditionalRiding.common.requirement.MinimalHpPercentRequirement
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.network.FriendlyByteBuf
@@ -85,7 +85,7 @@ object RidingRequirementAdapter : RequirementAdapter {
         this.registerType(AdvancementRequirement.ADAPTER_VARIANT, AdvancementRequirement::class)
         this.registerType(OwnerHoldsItemRequirement.ADAPTER_VARIANT, OwnerHoldsItemRequirement::class)
         this.registerType(ChanceRequirement.ADAPTER_VARIANT, ChanceRequirement::class)
-        this.registerType(LuckPermsNodeRequirement.ADAPTER_VARIANT, LuckPermsNodeRequirement::class)
+        this.registerType(PermissionNodeRequirement.ADAPTER_VARIANT, PermissionNodeRequirement::class)
         this.registerType(CosmeticItemRequirement.ADAPTER_VARIANT, CosmeticItemRequirement::class)
         this.registerType(MinimalHpPercentRequirement.ADAPTER_VARIANT, MinimalHpPercentRequirement::class)
     }
