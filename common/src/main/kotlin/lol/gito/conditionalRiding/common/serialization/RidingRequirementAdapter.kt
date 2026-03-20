@@ -58,6 +58,8 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 object RidingRequirementAdapter : RequirementAdapter {
+    const val VERSION_1_1 = 1.1
+    const val VERSION_1_2 = 1.2
 
     private const val VARIANT = "variant"
 
@@ -105,6 +107,7 @@ object RidingRequirementAdapter : RequirementAdapter {
             .registerTypeAdapterFactory(OptionalTypeAdapterFactory())
             .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
             .setPrettyPrinting()
+            .setVersion(VERSION_1_1)
             .create()
     }
 

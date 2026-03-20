@@ -11,11 +11,9 @@ import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
-import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import lol.gito.conditionalRiding.common.config.ConditionalRidingConfig
 import lol.gito.conditionalRiding.common.config.ConfigBuilder
-import lol.gito.conditionalRiding.common.config.Ruleset
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -66,41 +64,31 @@ object ConditionalRiding {
             )
         )
 
-        if (CONFIG.rulesets.isEmpty()) return true
-
-        val global = CONFIG.rulesets[GLOBAL_RULESET]
-
-        global?.let { ruleset ->
-            if (!ruleset.check(target)) {
-                debug("Conditional Riding :: global ruleset check failed for player ${player.uuid}")
-                sendRulesetMessageToPlayer(ruleset, target.pokemon, player)
-                return false
-            }
-        }
-
         val targetSpecies = target.pokemon.species.resourceIdentifier.path
-        val speciesRuleset = CONFIG.rulesets[targetSpecies] ?: return true
-
-
-        if (!speciesRuleset.check(target)) {
-            debug("Conditional Riding :: $targetSpecies ruleset check failed for player ${player.uuid}")
-            sendRulesetMessageToPlayer(speciesRuleset, target.pokemon, player)
-            return false
+        return when {
+            (CONFIG.rulesets.isEmpty()) -> true
+            (CONFIG.rulesets.contains(GLOBAL_RULESET)) -> checkRuleset(GLOBAL_RULESET, player, target)
+            (CONFIG.rulesets.contains(targetSpecies)) -> checkRuleset(targetSpecies, player, target)
+            else -> true
         }
-
-        return true
     }
 
-    private fun sendRulesetMessageToPlayer(ruleset: Ruleset, pokemon: Pokemon, player: ServerPlayer) {
-        val messageTranslationKey = when (ruleset.message) {
-            null -> "conditional_riding.failed_ruleset.global"
-            else -> ruleset.message
+    private fun checkRuleset(ruleset: String, player: ServerPlayer, target: PokemonEntity): Boolean {
+        val ruleset = CONFIG.rulesets[ruleset]!!
+        return when {
+            (!ruleset.enabled) -> true
+            (!ruleset.check(target)) -> {
+                debug("Conditional Riding :: $ruleset ruleset check failed for player ${player.uuid}")
+
+                player.sendSystemMessage(
+                    Component.translatable(ruleset.message, target.pokemon.getDisplayName(), player.name),
+                    CONFIG.messagesInHotbar
+                )
+
+                false
+            }
+
+            else -> true
         }
-
-        player.sendSystemMessage(Component.translatable(messageTranslationKey, pokemon.getDisplayName(), player.name))
-    }
-
-    private fun Ruleset.check(target: PokemonEntity): Boolean = this.rules.all { requirement ->
-        requirement.check(target.pokemon)
     }
 }
