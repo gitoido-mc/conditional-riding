@@ -107,7 +107,7 @@ object RidingRequirementAdapter : RequirementAdapter {
             .registerTypeAdapterFactory(OptionalTypeAdapterFactory())
             .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
             .setPrettyPrinting()
-            .setVersion(VERSION_1_1)
+            .setVersion(VERSION_1_2)
             .create()
     }
 
@@ -138,7 +138,7 @@ object RidingRequirementAdapter : RequirementAdapter {
 
     private fun getVariant(requirement: Requirement): String {
         val variant = this.types.inverse()[requirement::class] ?: throw IllegalArgumentException(
-            "Cannot resolve evolution requirement for type ${requirement::class.qualifiedName}"
+            "Cannot resolve requirement for type ${requirement::class.qualifiedName}"
         )
 
         return variant
@@ -146,7 +146,7 @@ object RidingRequirementAdapter : RequirementAdapter {
 
     private fun getRequirementType(variant: String): KClass<out Requirement> {
         val requirementType = this.types[variant] ?: throw IllegalArgumentException(
-            "Cannot resolve evolution requirement type for variant $variant"
+            "Cannot resolve requirement type for variant $variant"
         )
 
         return requirementType

@@ -67,7 +67,12 @@ object ConditionalRiding {
         val targetSpecies = target.pokemon.species.resourceIdentifier.path
         return when {
             (CONFIG.rulesets.isEmpty()) -> true
-            (CONFIG.rulesets.contains(GLOBAL_RULESET)) -> checkRuleset(GLOBAL_RULESET, player, target)
+            (CONFIG.rulesets.contains(GLOBAL_RULESET)) -> {
+                checkRuleset(GLOBAL_RULESET, player, target) && when (CONFIG.rulesets.contains(targetSpecies)) {
+                    true -> checkRuleset(targetSpecies, player, target)
+                    false -> true
+                }
+            }
             (CONFIG.rulesets.contains(targetSpecies)) -> checkRuleset(targetSpecies, player, target)
             else -> true
         }
