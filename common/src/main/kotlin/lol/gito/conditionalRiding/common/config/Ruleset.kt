@@ -9,11 +9,13 @@ package lol.gito.conditionalRiding.common.config
 
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.google.gson.annotations.Since
+import lol.gito.conditionalRiding.common.serialization.RidingRequirementAdapter.VERSION_1_2
 
 data class Ruleset(
-    val enabled: Boolean? = true,
-    val message: String? = null,
     val enabled: Boolean = true,
+    @Since(VERSION_1_2)
+    val negation: Boolean = false,
     val message: String = "conditional_riding.failed_ruleset.generic",
     val rules: List<Requirement> = emptyList()
 ) {
