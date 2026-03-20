@@ -48,8 +48,8 @@ jobs:
         with:
           name: artifacts
           path: |
-            */build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
-            */build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
+            fabric/build/libs/${{ env.project_name }}-fabric-${{ steps.version.outputs.MOD_VERSION }}.jar
+            neoforge/build/libs/${{ env.project_name }}-neoforge-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
 
   publish:
     needs: build
@@ -67,13 +67,21 @@ jobs:
           name: artifacts
           path: build/libs/
       - name: Display structure of downloaded files
-        if: github.event_name != 'release'
+        if: github.event_name == 'workflow_dispatch'
         run: ls -R
       - name: Publish ${{ matrix.loader }} version (CurseForge/Modrinth)
         if: github.event_name == 'release'
         uses: Kira-NT/mc-publish@v3.3
         with:
           name: "Conditional Riding ${{ needs.build.outputs.version }} for Cobblemon ${{ env.cobblemon }}"
+          java: 21
+          game-versions: 1.21.1
+          loaders: ${{ matrix.loader }}
+
+          files: |
+            build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
+            build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar 
+
           version: "${{ env.cobblemon }}_${{ needs.build.outputs.version }}"
           version-type: release
 
@@ -83,15 +91,5 @@ jobs:
           modrinth-id: ${{ env.modrinth_id }}
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
-          files: |
-            build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
-            build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar 
-
-          loaders: ${{ matrix.loader }}
-
-          game-versions: 1.21.1
-          java: 21
-
           dependencies: |
-            architectury-api(required){curseforge:419699}{modrinth:lhGA9TYQ}
-            cobblemon@1.7.0(required){curseforge:687131}{modrinth:MdwFAVRL}
+            cobblemon@1.7.3(required){curseforge:687131}{modrinth:MdwFAVRL}

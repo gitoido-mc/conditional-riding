@@ -23,7 +23,6 @@ dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
     modImplementation("com.cobblemon:mod:${property("cobblemon_version")}") { isTransitive = false }
-    compileOnly("net.luckperms:api:5.4")
 }
 
 tasks.test {
