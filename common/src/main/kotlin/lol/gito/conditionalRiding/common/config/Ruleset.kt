@@ -8,9 +8,17 @@
 package lol.gito.conditionalRiding.common.config
 
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 
 data class Ruleset(
     val enabled: Boolean? = true,
     val message: String? = null,
+    val enabled: Boolean = true,
+    val message: String = "conditional_riding.failed_ruleset.generic",
     val rules: List<Requirement> = emptyList()
-)
+) {
+    fun check(target: PokemonEntity): Boolean = when (negation) {
+        true -> !this.rules.all { requirement -> requirement.check(target.pokemon) }
+        else -> this.rules.all { requirement -> requirement.check(target.pokemon) }
+    }
+}
