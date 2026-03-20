@@ -9,6 +9,8 @@ on:
 env:
   cobblemon: 1.7.3
   project_name: conditional_riding
+  curseforge_id: 1489855
+  modrinth_id: bS53FEgC
 
 jobs:
   build:
@@ -42,7 +44,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: artifacts
-          path: build/libs/
+          path: |
+            fabric/build/libs/
+            neoforge/build/libs/
       - name: Save version output
         id: version
         run: echo "MOD_VERSION=$(gradle currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
@@ -50,9 +54,6 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-22.04
-    env:
-      curseforge_id: 1196570
-      modrinth_id: eF8kqlHd
     strategy:
       matrix:
         loader: [

@@ -16,8 +16,6 @@ import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import lol.gito.conditionalRiding.common.config.ConditionalRidingConfig
 import lol.gito.conditionalRiding.common.config.ConfigBuilder
 import lol.gito.conditionalRiding.common.config.Ruleset
-import net.luckperms.api.LuckPerms
-import net.luckperms.api.LuckPermsProvider
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -30,13 +28,7 @@ object ConditionalRiding {
     const val CONFIG_NAME = "cobblemon_${MOD_ID}"
 
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
-    val luckPerms: LuckPerms? by lazy {
-        try {
-            LuckPermsProvider.get()
-        } catch (_: IllegalStateException) {
-            null
-        }
-    }
+
 
     lateinit var CONFIG: ConditionalRidingConfig
     lateinit var implementation: ConditionalRidingImplementation

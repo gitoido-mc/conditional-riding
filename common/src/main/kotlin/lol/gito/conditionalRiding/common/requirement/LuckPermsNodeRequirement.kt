@@ -9,9 +9,7 @@ package lol.gito.conditionalRiding.common.requirement
 
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
-import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.ConditionalRiding.LOGGER
-import net.luckperms.api.LuckPermsProvider
 
 class LuckPermsNodeRequirement(val node: String) : Requirement {
     constructor() : this("conditional_riding.can_ride")
@@ -23,24 +21,25 @@ class LuckPermsNodeRequirement(val node: String) : Requirement {
 
             var check = false
 
-            ConditionalRiding.luckPerms?.let { luckPerms ->
-                luckPerms
-                    .userManager
-                    .loadUser(pokemon.getOwnerUUID()!!)
-                    .thenApplyAsync { user ->
-                        return@thenApplyAsync user
-                            .getInheritedGroups(user.queryOptions)
-                            .stream()
-                            .anyMatch { it.name == node }
-                    }
-                    .thenAcceptAsync { result ->
-                        check = result
-                    }
-            }
+            // not using the import here to gracefully return if luckperms are not installed
+            val luckPerms = net.luckperms.api.LuckPermsProvider.get()
+
+            luckPerms
+                .userManager
+                .loadUser(pokemon.getOwnerUUID()!!)
+                .thenApplyAsync { user ->
+                    return@thenApplyAsync user
+                        .getInheritedGroups(user.queryOptions)
+                        .stream()
+                        .anyMatch { it.name == node }
+                }
+                .thenAcceptAsync { result ->
+                    check = result
+                }
 
             return check
 
-        } catch (_: IllegalStateException) {
+        } catch (_: Exception) {
             LOGGER.error("Tried to check LuckPerms $node node presence, but LuckPerms is not installed.")
             LOGGER.error("Because of that, this check will pass")
 

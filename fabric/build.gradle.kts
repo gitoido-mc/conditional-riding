@@ -20,6 +20,10 @@ loom {
     enableTransitiveAccessWideners.set(true)
     silentMojangMappingsLicense()
 
+    mixin {
+        defaultRefmapName.set("mixins.${project.name}.refmap.json")
+    }
+
     val clientConfig = runConfigs.getByName("client")
     clientConfig.runDir = "runClient"
     // clientConfig.vmArg("-Dmixin.debug=true")
@@ -47,6 +51,9 @@ dependencies {
     implementation(project(":common", configuration = "namedElements"))
     "developmentFabric"(project(":common", configuration = "namedElements"))
     shadowCommon(project(":common", configuration = "transformProductionFabric"))
+
+    modImplementation("me.lucko:fabric-permissions-api:${property("fabric_permissions_api")}")
+    include("me.lucko:fabric-permissions-api:${property("fabric_permissions_api")}")
 }
 
 tasks {
