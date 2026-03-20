@@ -39,7 +39,7 @@ jobs:
         uses: burrunan/gradle-cache-action@v3
         with:
           read-only: true
-          arguments: buildMod
+          arguments: build
       - name: Capture build artifacts
         uses: actions/upload-artifact@v4
         with:
