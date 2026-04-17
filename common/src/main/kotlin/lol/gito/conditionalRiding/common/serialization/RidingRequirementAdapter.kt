@@ -78,7 +78,6 @@ object RidingRequirementAdapter : RequirementAdapter {
         this.registerType(TimeRangeRequirement.ADAPTER_VARIANT, TimeRangeRequirement::class)
         this.registerType(LevelRequirement.ADAPTER_VARIANT, LevelRequirement::class)
         this.registerType(WeatherRequirement.ADAPTER_VARIANT, WeatherRequirement::class)
-        this.registerType(StatEqualRequirement.ADAPTER_VARIANT, StatEqualRequirement::class)
         this.registerType(UseMoveRequirement.ADAPTER_VARIANT, UseMoveRequirement::class)
         this.registerType(MoonPhaseRequirement.ADAPTER_VARIANT, MoonPhaseRequirement::class)
         this.registerType(BlocksTraveledRequirement.ADAPTER_VARIANT, BlocksTraveledRequirement::class)
@@ -86,7 +85,6 @@ object RidingRequirementAdapter : RequirementAdapter {
         this.registerType(PropertyRangeRequirement.ADAPTER_VARIANT, PropertyRangeRequirement::class)
         this.registerType(AdvancementRequirement.ADAPTER_VARIANT, AdvancementRequirement::class)
         this.registerType(OwnerHoldsItemRequirement.ADAPTER_VARIANT, OwnerHoldsItemRequirement::class)
-        this.registerType(ChanceRequirement.ADAPTER_VARIANT, ChanceRequirement::class)
         this.registerType(PermissionNodeRequirement.ADAPTER_VARIANT, PermissionNodeRequirement::class)
         this.registerType(CosmeticItemRequirement.ADAPTER_VARIANT, CosmeticItemRequirement::class)
         this.registerType(MinimalHpPercentRequirement.ADAPTER_VARIANT, MinimalHpPercentRequirement::class)
@@ -126,14 +124,6 @@ object RidingRequirementAdapter : RequirementAdapter {
         val variant = getVariant(requirement)
         json.addProperty(VARIANT, variant)
         return json
-    }
-
-    fun encode(requirement: Requirement, buffer: FriendlyByteBuf) {
-        buffer.writeString(gson.toJson(requirement, Requirement::class.java))
-    }
-
-    fun decode(buffer: FriendlyByteBuf): Requirement {
-        return gson.fromJson(buffer.readString(), Requirement::class.java)
     }
 
     private fun getVariant(requirement: Requirement): String {
