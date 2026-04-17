@@ -12,6 +12,8 @@ import lol.gito.conditionalRiding.common.ConditionalRiding.MOD_ID
 import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
+import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.event.RegisterCommandsEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 @Mod(MOD_ID)
@@ -20,6 +22,11 @@ object ConditionalRidingNeoForge : ConditionalRidingImplementation {
         with(MOD_BUS) {
             addListener { _: FMLCommonSetupEvent ->
                 ConditionalRiding.initialize(this@ConditionalRidingNeoForge)
+            }
+        }
+        with(NeoForge.EVENT_BUS) {
+            addListener { e: RegisterCommandsEvent ->
+                ConditionalRiding.Commands.register(e.dispatcher, e.buildContext, e.commandSelection)
             }
         }
     }

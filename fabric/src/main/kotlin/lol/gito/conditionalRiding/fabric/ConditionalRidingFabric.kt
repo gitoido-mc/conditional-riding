@@ -10,9 +10,11 @@ package lol.gito.conditionalRiding.fabric
 import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 
 object ConditionalRidingFabric : ModInitializer, ConditionalRidingImplementation {
     override fun onInitialize() {
         ConditionalRiding.initialize(this)
+        CommandRegistrationCallback.EVENT.register(ConditionalRiding.Commands::register)
     }
 }

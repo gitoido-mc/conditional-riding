@@ -11,9 +11,17 @@ import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
+import com.cobblemon.mod.common.platform.events.ServerEvent
+import com.mojang.brigadier.Command
+import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.context.CommandContext
 import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import lol.gito.conditionalRiding.common.config.ConditionalRidingConfig
 import lol.gito.conditionalRiding.common.config.ConfigBuilder
+import net.minecraft.commands.CommandBuildContext
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands
+import net.minecraft.commands.Commands.literal
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -21,6 +29,40 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object ConditionalRiding {
+    object ReloadCommand {
+        private const val NAME = "reload"
+
+        fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
+            ConditionalRiding.Commands.prefixes.forEach { prefix ->
+                val command = literal(prefix).then(
+                    literal(NAME)
+                        .executes(::execute)
+                )
+                dispatcher.register(command)
+            }
+        }
+
+        fun execute(context: CommandContext<CommandSourceStack>): Int {
+            loadConfig(null)
+            context.source.player?.displayClientMessage(Component.literal("reloaded conditional riding config!"), true)
+            return Command.SINGLE_SUCCESS
+        }
+    }
+
+    object Commands {
+        val prefixes = listOf("conditional_riding", "cr")
+
+        @Suppress("unused")
+        fun register(
+            dispatcher: CommandDispatcher<CommandSourceStack>,
+            registry: CommandBuildContext,
+            selection: Commands.CommandSelection
+        ) {
+            ReloadCommand.register(dispatcher)
+        }
+    }
+
+
     const val MOD_ID = "conditional_riding"
     const val GLOBAL_RULESET = "global"
     const val CONFIG_NAME = "cobblemon_${MOD_ID}"
