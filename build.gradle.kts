@@ -10,9 +10,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id("java")
     id("java-library")
-    kotlin("jvm") version("2.2.20")
-    id("com.gradleup.shadow") version "9.3.1" apply false
-    id("dev.architectury.loom") version("1.11-SNAPSHOT") apply false
+    kotlin("jvm") version("2.3.20")
+    id("com.gradleup.shadow") version "9.4.1" apply false
+    id("dev.architectury.loom") version("1.14-SNAPSHOT") apply false
     id("architectury-plugin") version("3.4-SNAPSHOT") apply false
     id("pl.allegro.tech.build.axion-release") version "1.21.1"
 }
