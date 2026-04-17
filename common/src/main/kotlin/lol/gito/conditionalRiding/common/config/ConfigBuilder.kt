@@ -7,7 +7,12 @@
 
 package lol.gito.conditionalRiding.common.config
 
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.item.PokemonItem
+import com.cobblemon.mod.common.pokemon.Pokemon
+import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.ConditionalRiding.LOGGER
+import lol.gito.conditionalRiding.common.ConditionalRiding.info
 import lol.gito.conditionalRiding.common.serialization.RidingRequirementAdapter
 import java.io.File
 import java.io.FileReader
@@ -27,7 +32,6 @@ class ConfigBuilder private constructor(private val path: String) {
     }
 
     private fun load(): ConditionalRidingConfig {
-
         var config = ConditionalRidingConfig()
         val configFile = File("config/$path.json")
         configFile.parentFile.mkdirs()
@@ -36,11 +40,15 @@ class ConfigBuilder private constructor(private val path: String) {
             try {
                 val fileReader = FileReader(configFile)
                 config = RidingRequirementAdapter.gson.fromJson(fileReader, ConditionalRidingConfig::class.java)
-                LOGGER.info("Found ${config.rulesets.count()} cobblemon riding rulesets")
+                info("found ${config.rulesets.count()} cobblemon riding rulesets")
                 fileReader.close()
             } catch (e: Exception) {
-                LOGGER.error("Error reading config file: %s, loading default".format(e.cause?.message))
-                return config
+                LOGGER.error("error reading config file: %s, loading default".format(e.cause?.message))
+                return try {
+                    ConditionalRiding.CONFIG
+                } catch (_: UninitializedPropertyAccessException) {
+                    config
+                }
             }
         }
 
