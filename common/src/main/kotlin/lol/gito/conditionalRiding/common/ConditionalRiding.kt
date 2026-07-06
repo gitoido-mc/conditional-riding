@@ -12,12 +12,14 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import lol.gito.conditionalRiding.common.config.ConditionalRidingConfig
 import lol.gito.conditionalRiding.common.config.ConfigBuilder
+import lol.gito.conditionalRiding.common.util.SynchronizedFieldProperty
 import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -25,19 +27,23 @@ import net.minecraft.commands.Commands.literal
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.ItemStack
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object ConditionalRiding {
+    var Pokemon.ridingItem: ItemStack by SynchronizedFieldProperty { ItemStack.EMPTY }
+
     object ReloadCommand {
         private const val NAME = "reload"
 
         fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
             ConditionalRiding.Commands.prefixes.forEach { prefix ->
-                val command = literal(prefix).then(
-                    literal(NAME)
-                        .executes(::execute)
-                )
+                val command =
+                    literal(prefix).then(
+                        literal(NAME)
+                            .executes(::execute),
+                    )
                 dispatcher.register(command)
             }
         }
@@ -56,12 +62,11 @@ object ConditionalRiding {
         fun register(
             dispatcher: CommandDispatcher<CommandSourceStack>,
             registry: CommandBuildContext,
-            selection: Commands.CommandSelection
+            selection: Commands.CommandSelection,
         ) {
             ReloadCommand.register(dispatcher)
         }
     }
-
 
     const val MOD_ID = "conditional_riding"
     const val GLOBAL_RULESET = "global"
@@ -69,15 +74,21 @@ object ConditionalRiding {
 
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
 
-    lateinit var CONFIG: ConditionalRidingConfig
+    lateinit var config: ConditionalRidingConfig
     lateinit var implementation: ConditionalRidingImplementation
     lateinit var server: MinecraftServer
 
     @JvmStatic
-    fun info(message: String, vararg params: Any) = LOGGER.info("conditional_riding :: $message", *params)
+    fun info(
+        message: String,
+        vararg params: Any,
+    ) = LOGGER.info("conditional_riding :: $message", *params)
 
     @JvmStatic
-    fun debug(message: String, vararg params: Any) = if (CONFIG.debug) info(message, *params) else Unit
+    fun debug(
+        message: String,
+        vararg params: Any,
+    ) = if (config.debug) info(message, *params) else Unit
 
     fun initialize(implementation: ConditionalRidingImplementation) {
         this.implementation = implementation
@@ -89,7 +100,7 @@ object ConditionalRiding {
         PlatformEvents.SERVER_STARTED.subscribe(Priority.LOWEST, ::loadConfig)
 
         CobblemonEvents.RIDE_EVENT_PRE.subscribe { event ->
-            if (!CONFIG.enabled) {
+            if (!config.enabled) {
                 debug("enabled config option is set to false, rulesets will not be checked, skipping...")
                 return@subscribe
             }
@@ -100,11 +111,11 @@ object ConditionalRiding {
     @Suppress("unused")
     fun loadConfig(event: ServerEvent.Started?) {
         info("loading config")
-        CONFIG = ConfigBuilder.load(CONFIG_NAME)
-        if (CONFIG.debug) debug("debug option enabled, expect increased log spam")
-        if (CONFIG.enabled) {
-            info("loaded ${CONFIG.rulesets.count()} rulesets")
-            if (CONFIG.messagesInHotbar) {
+        config = ConfigBuilder.load(CONFIG_NAME)
+        if (config.debug) debug("debug option enabled, expect increased log spam")
+        if (config.enabled) {
+            info("loaded ${config.rulesets.count()} rulesets")
+            if (config.messagesInHotbar) {
                 info("the messages will be shown in hotbar, because messagesInHotbar option is set to true")
             } else {
                 info("the messages will be shown in chat, because messagesInHotbar option is set to false")
@@ -115,27 +126,43 @@ object ConditionalRiding {
     }
 
     @JvmStatic
-    fun canRide(player: ServerPlayer, target: PokemonEntity): Boolean {
+    fun canRide(
+        player: ServerPlayer,
+        target: PokemonEntity,
+    ): Boolean {
         val targetSpecies = target.pokemon.species.resourceIdentifier.path
         debug("checking if we allow player %s to ride %s".format(player.uuid, targetSpecies))
 
         return when {
-            (CONFIG.rulesets.isEmpty()) -> true
-            (CONFIG.rulesets.contains(GLOBAL_RULESET)) -> {
-                debug("$GLOBAL_RULESET ruleset found, checking it first")
-                checkRuleset(GLOBAL_RULESET, player, target) && when (CONFIG.rulesets.contains(targetSpecies)) {
-                    true -> checkRuleset(targetSpecies, player, target)
-                    false -> true
-                }
+            (config.rulesets.isEmpty()) -> {
+                true
             }
 
-            (CONFIG.rulesets.contains(targetSpecies)) -> checkRuleset(targetSpecies, player, target)
-            else -> true
+            (config.rulesets.contains(GLOBAL_RULESET)) -> {
+                debug("$GLOBAL_RULESET ruleset found, checking it first")
+                checkRuleset(GLOBAL_RULESET, player, target) &&
+                    when (config.rulesets.contains(targetSpecies)) {
+                        true -> checkRuleset(targetSpecies, player, target)
+                        false -> true
+                    }
+            }
+
+            (config.rulesets.contains(targetSpecies)) -> {
+                checkRuleset(targetSpecies, player, target)
+            }
+
+            else -> {
+                true
+            }
         }
     }
 
-    private fun checkRuleset(ruleset: String, player: ServerPlayer, target: PokemonEntity): Boolean {
-        val ruleset = CONFIG.rulesets[ruleset]!!
+    private fun checkRuleset(
+        ruleset: String,
+        player: ServerPlayer,
+        target: PokemonEntity,
+    ): Boolean {
+        val ruleset = config.rulesets[ruleset]!!
         return when {
             (!ruleset.enabled) -> {
                 debug("enabled config option is set to false for $ruleset ruleset, skipping")
@@ -148,7 +175,7 @@ object ConditionalRiding {
 
                 player.sendSystemMessage(
                     Component.translatable(ruleset.message, target.pokemon.getDisplayName(), player.name),
-                    CONFIG.messagesInHotbar
+                    config.messagesInHotbar,
                 )
 
                 false

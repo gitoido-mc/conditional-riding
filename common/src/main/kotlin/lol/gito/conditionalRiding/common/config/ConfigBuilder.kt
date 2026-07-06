@@ -7,9 +7,6 @@
 
 package lol.gito.conditionalRiding.common.config
 
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.item.PokemonItem
-import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.ConditionalRiding.LOGGER
 import lol.gito.conditionalRiding.common.ConditionalRiding.info
@@ -24,11 +21,11 @@ import java.io.PrintWriter
  * @see (https://github.com/timinc-cobble/cobblemon-tim-core)
  *
  */
-class ConfigBuilder private constructor(private val path: String) {
+class ConfigBuilder private constructor(
+    private val path: String,
+) {
     companion object {
-        fun load(path: String): ConditionalRidingConfig {
-            return ConfigBuilder(path).load()
-        }
+        fun load(path: String): ConditionalRidingConfig = ConfigBuilder(path).load()
     }
 
     private fun load(): ConditionalRidingConfig {
@@ -45,7 +42,7 @@ class ConfigBuilder private constructor(private val path: String) {
             } catch (e: Exception) {
                 LOGGER.error("error reading config file: %s, loading default".format(e.cause?.message))
                 return try {
-                    ConditionalRiding.CONFIG
+                    ConditionalRiding.config
                 } catch (_: UninitializedPropertyAccessException) {
                     config
                 }

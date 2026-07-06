@@ -19,14 +19,20 @@ data class ConditionalRidingConfig(
     val enabled: Boolean = true,
     @Since(VERSION_1_1)
     val messagesInHotbar: Boolean = false,
-    val rulesets: Map<String, Ruleset> = mapOf(
-        GLOBAL_RULESET to Ruleset(
-            message = "conditional_riding.failed_ruleset.global",
-            rules = listOf(
-                HeldItemRequirement(
-                    ItemPredicate.Builder.item().of(Items.SADDLE).build()
-                )
-            )
-        )
-    )
+    val rulesets: Map<String, Ruleset> =
+        mapOf(
+            GLOBAL_RULESET to
+                Ruleset(
+                    message = "conditional_riding.failed_ruleset.global",
+                    rules =
+                        listOf(
+                            HeldItemRequirement(
+                                ItemPredicate.Builder
+                                    .item()
+                                    .of(Items.SADDLE)
+                                    .build(),
+                            ),
+                        ),
+                ),
+        ),
 )

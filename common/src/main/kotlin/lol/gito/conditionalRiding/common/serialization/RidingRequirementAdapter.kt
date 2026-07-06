@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.pokemon.requirements.AdvancementRequirement
 import com.cobblemon.mod.common.pokemon.requirements.AreaRequirement
 import com.cobblemon.mod.common.pokemon.requirements.BiomeRequirement
 import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
-import com.cobblemon.mod.common.pokemon.requirements.ChanceRequirement
 import com.cobblemon.mod.common.pokemon.requirements.FriendshipRequirement
 import com.cobblemon.mod.common.pokemon.requirements.HeldItemRequirement
 import com.cobblemon.mod.common.pokemon.requirements.LevelRequirement
@@ -27,7 +26,6 @@ import com.cobblemon.mod.common.pokemon.requirements.OwnerHoldsItemRequirement
 import com.cobblemon.mod.common.pokemon.requirements.PartyMemberRequirement
 import com.cobblemon.mod.common.pokemon.requirements.PokemonPropertiesRequirement
 import com.cobblemon.mod.common.pokemon.requirements.PropertyRangeRequirement
-import com.cobblemon.mod.common.pokemon.requirements.StatEqualRequirement
 import com.cobblemon.mod.common.pokemon.requirements.StructureRequirement
 import com.cobblemon.mod.common.pokemon.requirements.TimeRangeRequirement
 import com.cobblemon.mod.common.pokemon.requirements.UseMoveRequirement
@@ -38,8 +36,6 @@ import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.cobblemon.mod.common.util.adapters.InteractionEffectAdapter
 import com.cobblemon.mod.common.util.adapters.pokemonPropertiesShortAdapter
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.writeString
 import com.google.common.collect.HashBiMap
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -48,10 +44,9 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.requirement.CosmeticItemRequirement
-import lol.gito.conditionalRiding.common.requirement.PermissionNodeRequirement
 import lol.gito.conditionalRiding.common.requirement.MinimalHpPercentRequirement
+import lol.gito.conditionalRiding.common.requirement.PermissionNodeRequirement
 import net.minecraft.advancements.critereon.ItemPredicate
-import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.LowerCaseEnumTypeAdapterFactory
 import java.lang.reflect.Type
@@ -96,9 +91,8 @@ object RidingRequirementAdapter : RequirementAdapter {
             .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
             .registerTypeAdapter(
                 ItemPredicate::class.java,
-                ItemConditionWrapperAdapter(ConditionalRiding.server.registryAccess())
-            )
-            .registerTypeAdapter(Requirement::class.java, RidingRequirementAdapter)
+                ItemConditionWrapperAdapter(ConditionalRiding.server.registryAccess()),
+            ).registerTypeAdapter(Requirement::class.java, RidingRequirementAdapter)
             .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
             .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
             .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
@@ -109,17 +103,32 @@ object RidingRequirementAdapter : RequirementAdapter {
             .create()
     }
 
-    override fun <T : Requirement> registerType(id: String, type: KClass<T>) {
+    override fun <T : Requirement> registerType(
+        id: String,
+        type: KClass<T>,
+    ) {
         this.types[id.lowercase()] = type
     }
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Requirement {
-        val variant = json.asJsonObject.get(VARIANT).asString.lowercase()
+    override fun deserialize(
+        json: JsonElement,
+        typeOfT: Type,
+        context: JsonDeserializationContext,
+    ): Requirement {
+        val variant =
+            json.asJsonObject
+                .get(VARIANT)
+                .asString
+                .lowercase()
         val type = getRequirementType(variant)
         return context.deserialize(json, type.java)
     }
 
-    override fun serialize(requirement: Requirement, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(
+        requirement: Requirement,
+        typeOfSrc: Type,
+        context: JsonSerializationContext,
+    ): JsonElement {
         val json = context.serialize(requirement, requirement::class.java).asJsonObject
         val variant = getVariant(requirement)
         json.addProperty(VARIANT, variant)
@@ -127,17 +136,19 @@ object RidingRequirementAdapter : RequirementAdapter {
     }
 
     private fun getVariant(requirement: Requirement): String {
-        val variant = this.types.inverse()[requirement::class] ?: throw IllegalArgumentException(
-            "Cannot resolve requirement for type ${requirement::class.qualifiedName}"
-        )
+        val variant =
+            this.types.inverse()[requirement::class] ?: throw IllegalArgumentException(
+                "Cannot resolve requirement for type ${requirement::class.qualifiedName}",
+            )
 
         return variant
     }
 
     private fun getRequirementType(variant: String): KClass<out Requirement> {
-        val requirementType = this.types[variant] ?: throw IllegalArgumentException(
-            "Cannot resolve requirement type for variant $variant"
-        )
+        val requirementType =
+            this.types[variant] ?: throw IllegalArgumentException(
+                "Cannot resolve requirement type for variant $variant",
+            )
 
         return requirementType
     }

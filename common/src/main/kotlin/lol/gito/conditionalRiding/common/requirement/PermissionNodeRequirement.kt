@@ -14,19 +14,29 @@ import lol.gito.conditionalRiding.common.ConditionalRiding.MOD_ID
 import lol.gito.conditionalRiding.common.permission.RidingPermission
 import net.minecraft.resources.ResourceLocation
 
-class PermissionNodeRequirement(val node: String = "conditional_riding.can_ride") : Requirement {
-    override fun check(pokemon: Pokemon): Boolean = when {
-        (!pokemon.isPlayerOwned()) -> false
-        (pokemon.getOwnerPlayer() == null) -> false
-        else -> {
-            val permission = RidingPermission(
-                ResourceLocation.fromNamespaceAndPath(MOD_ID, node.replace('.', '/')),
-                node
-            )
+class PermissionNodeRequirement(
+    val node: String = "conditional_riding.can_ride",
+) : Requirement {
+    override fun check(pokemon: Pokemon): Boolean =
+        when {
+            (!pokemon.isPlayerOwned()) -> {
+                false
+            }
 
-            Cobblemon.permissionValidator.hasPermission(pokemon.getOwnerPlayer()!!, permission)
+            (pokemon.getOwnerPlayer() == null) -> {
+                false
+            }
+
+            else -> {
+                val permission =
+                    RidingPermission(
+                        ResourceLocation.fromNamespaceAndPath(MOD_ID, node.replace('.', '/')),
+                        node,
+                    )
+
+                Cobblemon.permissionValidator.hasPermission(pokemon.getOwnerPlayer()!!, permission)
+            }
         }
-    }
 
     companion object {
         const val ADAPTER_VARIANT = "permission_node"

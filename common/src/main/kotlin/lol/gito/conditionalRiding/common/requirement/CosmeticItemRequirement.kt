@@ -12,8 +12,15 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.world.item.Items
 
-class CosmeticItemRequirement(val itemCondition: ItemPredicate) : Requirement {
-    constructor() : this(ItemPredicate.Builder.item().of(Items.EGG).build())
+class CosmeticItemRequirement(
+    val itemCondition: ItemPredicate,
+) : Requirement {
+    constructor() : this(
+        ItemPredicate.Builder
+            .item()
+            .of(Items.EGG)
+            .build(),
+    )
 
     override fun check(pokemon: Pokemon): Boolean = this.itemCondition.test(pokemon.cosmeticItem)
 

@@ -1,7 +1,7 @@
-modLoader="kotlinforforge"
-loaderVersion="[5.10,)"
+modLoader = "kotlinforforge"
+loaderVersion = "[5.10,)"
 issueTrackerURL = "https://github.com/gitoido-mc/conditional-riding/issues"
-license='''GPL-3.0-only'''
+license = '''GPL-3.0-only'''
 
 [[mods]]
 modId = "conditional_riding"

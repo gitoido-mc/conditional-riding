@@ -19,9 +19,14 @@ import java.lang.reflect.ParameterizedType
 import java.util.*
 
 class OptionalTypeAdapterFactory : TypeAdapterFactory {
-    class OptionalTypeAdapter<T>(private val typeAdapter: TypeAdapter<T>) : TypeAdapter<Optional<T>>() {
+    class OptionalTypeAdapter<T>(
+        private val typeAdapter: TypeAdapter<T>,
+    ) : TypeAdapter<Optional<T>>() {
         @Throws(IOException::class)
-        override fun write(out: JsonWriter, value: Optional<T>) {
+        override fun write(
+            out: JsonWriter,
+            value: Optional<T>,
+        ) {
             when (value.isPresent) {
                 true -> typeAdapter.write(out, value.get())
                 false -> out.nullValue()
@@ -29,19 +34,22 @@ class OptionalTypeAdapterFactory : TypeAdapterFactory {
         }
 
         @Throws(IOException::class)
-        override fun read(`in`: JsonReader): Optional<T> = when (`in`.peek() != JsonToken.NULL) {
-            true -> Optional.ofNullable(typeAdapter.read(`in`))
-            false -> {
-                `in`.nextNull()
-                Optional.empty()
-            }
-        } as Optional<T>
+        override fun read(`in`: JsonReader): Optional<T> =
+            when (`in`.peek() != JsonToken.NULL) {
+                true -> {
+                    Optional.ofNullable(typeAdapter.read(`in`))
+                }
 
+                false -> {
+                    `in`.nextNull()
+                    Optional.empty()
+                }
+            } as Optional<T>
     }
 
     override fun <T> create(
         gson: Gson,
-        typeToken: TypeToken<T>
+        typeToken: TypeToken<T>,
     ): TypeAdapter<T>? {
         if (!Optional::class.java.isAssignableFrom(typeToken.rawType)) return null
 

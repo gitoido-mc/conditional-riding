@@ -12,8 +12,8 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 
 class MinimalHpPercentRequirement : Requirement {
     val percent = MAX_PERCENT
-    override fun check(pokemon: Pokemon) =
-        ((pokemon.currentHealth.toDouble() / pokemon.maxHealth.toDouble()) * MAX_PERCENT) >= percent
+
+    override fun check(pokemon: Pokemon) = ((pokemon.currentHealth.toDouble() / pokemon.maxHealth.toDouble()) * MAX_PERCENT) >= percent
 
     companion object {
         const val MAX_PERCENT = 100.0

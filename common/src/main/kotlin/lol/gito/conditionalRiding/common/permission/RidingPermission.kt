@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation
 
 data class RidingPermission(
     override val identifier: ResourceLocation,
-    override val literal: String
+    override val literal: String,
 ) : Permission {
     override val level: PermissionLevel = PermissionLevel.NONE
 }

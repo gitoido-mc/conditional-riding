@@ -17,10 +17,11 @@ data class Ruleset(
     @Since(VERSION_1_2)
     val negation: Boolean = false,
     val message: String = "conditional_riding.failed_ruleset.generic",
-    val rules: List<Requirement> = emptyList()
+    val rules: List<Requirement> = emptyList(),
 ) {
-    fun check(target: PokemonEntity): Boolean = when (negation) {
-        true -> !this.rules.all { requirement -> requirement.check(target.pokemon) }
-        else -> this.rules.all { requirement -> requirement.check(target.pokemon) }
-    }
+    fun check(target: PokemonEntity): Boolean =
+        when (negation) {
+            true -> !this.rules.all { requirement -> requirement.check(target.pokemon) }
+            else -> this.rules.all { requirement -> requirement.check(target.pokemon) }
+        }
 }
