@@ -7,7 +7,7 @@
 
 plugins {
     id("com.gradleup.shadow")
-    id("dev.architectury.loom")
+    id("dev.architectury.loom-remap")
     id("architectury-plugin")
 }
 
@@ -27,7 +27,7 @@ loom {
     val clientConfig = runConfigs.getByName("client")
     clientConfig.runDir = "runClient"
     // clientConfig.vmArg("-Dmixin.debug=true")
-    //This is AshKetchum's UUID so you get an Ash Ketchum skin
+    // This is AshKetchum's UUID so you get an Ash Ketchum skin
     clientConfig.programArg("--username=AshKetchum")
     clientConfig.programArg("--uuid=93e4e551-589a-41cb-ab2d-435266c8e035")
 
@@ -44,7 +44,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
 
-    //needed for cobblemon
+    // needed for cobblemon
     modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin")}")
     modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}") { isTransitive = false }
 

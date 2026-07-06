@@ -7,7 +7,7 @@
 
 plugins {
     id("org.jetbrains.kotlin.jvm")
-    id("dev.architectury.loom")
+    id("dev.architectury.loom-remap")
     id("architectury-plugin")
 }
 

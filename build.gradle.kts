@@ -10,11 +10,12 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id("java")
     id("java-library")
-    kotlin("jvm") version("2.3.20")
+    kotlin("jvm") version ("2.3.20")
     id("com.gradleup.shadow") version "9.4.1" apply false
-    id("dev.architectury.loom") version("1.14-SNAPSHOT") apply false
-    id("architectury-plugin") version("3.4-SNAPSHOT") apply false
+    id("dev.architectury.loom-remap") version ("1.17-SNAPSHOT") apply false
+    id("architectury-plugin") version ("3.5-SNAPSHOT") apply false
     id("pl.allegro.tech.build.axion-release") version "1.21.1"
+    id("com.diffplug.spotless") version "8.7.0"
 }
 
 scmVersion {
@@ -34,12 +35,24 @@ allprojects {
 subprojects {
     apply(plugin = "java")
     apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "com.diffplug.spotless")
 
     version = rootProject.version
     group = project.properties["maven_group"]!!
 
     repositories {
         maven("https://artefacts.cobblemon.com/releases/")
+    }
+
+    spotless {
+        kotlin {
+            // version, editorConfigPath, editorConfigOverride and customRuleSets are all optional
+            ktlint("1.8.0")
+            suppressLintsFor {
+                step = "ktlint"
+                shortCode = "standard:no-wildcard-imports"
+            }
+        }
     }
 
     tasks {

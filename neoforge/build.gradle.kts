@@ -7,7 +7,7 @@
 
 plugins {
     id("com.gradleup.shadow")
-    id("dev.architectury.loom")
+    id("dev.architectury.loom-remap")
     id("architectury-plugin")
 }
 
