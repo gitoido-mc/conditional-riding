@@ -1,3 +1,21 @@
+## [0.1.4] - 2026-06-07
+
+### 🚀 Features
+
+- Riding style requirement
+- Mark obtained requirement
+
+### 💼 Other
+
+- Updated gradle deps
+
+### 🎨 Styling
+
+- Ktlint code style
+
+### ⚙️ Miscellaneous Tasks
+
+- Updated readme.md
 ## [0.1.3] - 2026-04-17
 
 ### 🚀 Features
@@ -13,6 +31,10 @@
 ### 🚜 Refactor
 
 - Remove non-applicable requirements
+
+### ⚙️ Miscellaneous Tasks
+
+- Update changelog
 ## [0.1.2] - 2026-03-20
 
 ### 🚀 Features
