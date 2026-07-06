@@ -44,6 +44,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.requirement.CosmeticItemRequirement
+import lol.gito.conditionalRiding.common.requirement.MarkObtainedRequirement
 import lol.gito.conditionalRiding.common.requirement.MinimalHpPercentRequirement
 import lol.gito.conditionalRiding.common.requirement.PermissionNodeRequirement
 import lol.gito.conditionalRiding.common.requirement.RidingStyleRequirement
@@ -85,6 +86,7 @@ object RidingRequirementAdapter : RequirementAdapter {
         this.registerType(CosmeticItemRequirement.ADAPTER_VARIANT, CosmeticItemRequirement::class)
         this.registerType(MinimalHpPercentRequirement.ADAPTER_VARIANT, MinimalHpPercentRequirement::class)
         this.registerType(RidingStyleRequirement.ADAPTER_VARIANT, RidingStyleRequirement::class)
+        this.registerType(MarkObtainedRequirement.ADAPTER_VARIANT, MarkObtainedRequirement::class)
     }
 
     val gson: Gson by lazy {
