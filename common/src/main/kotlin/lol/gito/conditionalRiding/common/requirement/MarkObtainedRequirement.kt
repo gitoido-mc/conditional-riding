@@ -13,8 +13,8 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.resources.ResourceLocation
 
 class MarkObtainedRequirement(
-    val mark: ResourceLocation
-): Requirement {
+    val mark: ResourceLocation,
+) : Requirement {
     companion object {
         const val ADAPTER_VARIANT = "mark_obtained"
     }
