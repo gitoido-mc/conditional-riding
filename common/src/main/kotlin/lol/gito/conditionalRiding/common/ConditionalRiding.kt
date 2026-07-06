@@ -12,14 +12,12 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
-import com.cobblemon.mod.common.pokemon.Pokemon
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import lol.gito.conditionalRiding.common.config.ConditionalRidingConfig
 import lol.gito.conditionalRiding.common.config.ConfigBuilder
-import lol.gito.conditionalRiding.common.util.SynchronizedFieldProperty
 import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -27,13 +25,10 @@ import net.minecraft.commands.Commands.literal
 import net.minecraft.network.chat.Component
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.item.ItemStack
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object ConditionalRiding {
-    var Pokemon.ridingItem: ItemStack by SynchronizedFieldProperty { ItemStack.EMPTY }
-
     object ReloadCommand {
         private const val NAME = "reload"
 
