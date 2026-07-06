@@ -46,6 +46,7 @@ import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.requirement.CosmeticItemRequirement
 import lol.gito.conditionalRiding.common.requirement.MinimalHpPercentRequirement
 import lol.gito.conditionalRiding.common.requirement.PermissionNodeRequirement
+import lol.gito.conditionalRiding.common.requirement.RidingStyleRequirement
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.LowerCaseEnumTypeAdapterFactory
@@ -83,6 +84,7 @@ object RidingRequirementAdapter : RequirementAdapter {
         this.registerType(PermissionNodeRequirement.ADAPTER_VARIANT, PermissionNodeRequirement::class)
         this.registerType(CosmeticItemRequirement.ADAPTER_VARIANT, CosmeticItemRequirement::class)
         this.registerType(MinimalHpPercentRequirement.ADAPTER_VARIANT, MinimalHpPercentRequirement::class)
+        this.registerType(RidingStyleRequirement.ADAPTER_VARIANT, RidingStyleRequirement::class)
     }
 
     val gson: Gson by lazy {
