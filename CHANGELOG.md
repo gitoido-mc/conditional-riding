@@ -1,9 +1,13 @@
-## [0.1.4] - 2026-06-07
+## [0.1.4] - 2026-07-06
 
 ### 🚀 Features
 
 - Riding style requirement
 - Mark obtained requirement
+
+### 🐛 Bug Fixes
+
+- Cleaned up dangling code
 
 ### 💼 Other
 
@@ -12,10 +16,11 @@
 ### 🎨 Styling
 
 - Ktlint code style
+- Final ktlint
 
 ### ⚙️ Miscellaneous Tasks
 
-- Updated readme.md
+- Changelog update
 ## [0.1.3] - 2026-04-17
 
 ### 🚀 Features
@@ -35,6 +40,7 @@
 ### ⚙️ Miscellaneous Tasks
 
 - Update changelog
+- Updated readme.md
 ## [0.1.2] - 2026-03-20
 
 ### 🚀 Features
