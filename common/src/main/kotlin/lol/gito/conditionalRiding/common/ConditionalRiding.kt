@@ -18,6 +18,7 @@ import com.mojang.brigadier.context.CommandContext
 import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import lol.gito.conditionalRiding.common.config.ConditionalRidingConfig
 import lol.gito.conditionalRiding.common.config.ConfigBuilder
+import lol.gito.conditionalRiding.common.config.Ruleset
 import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -64,7 +65,6 @@ object ConditionalRiding {
     }
 
     const val MOD_ID = "conditional_riding"
-    const val GLOBAL_RULESET = "global"
     const val CONFIG_NAME = "cobblemon_${MOD_ID}"
 
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID)
@@ -109,7 +109,8 @@ object ConditionalRiding {
         config = ConfigBuilder.load(CONFIG_NAME)
         if (config.debug) debug("debug option enabled, expect increased log spam")
         if (config.enabled) {
-            info("loaded ${config.rulesets.count()} rulesets")
+            if (config.global != null) info("global ruleset loaded")
+            info("loaded ${config.custom.count()} custom rulesets")
             if (config.messagesInHotbar) {
                 info("the messages will be shown in hotbar, because messagesInHotbar option is set to true")
             } else {
@@ -128,44 +129,34 @@ object ConditionalRiding {
         val targetSpecies = target.pokemon.species.resourceIdentifier.path
         debug("checking if we allow player %s to ride %s".format(player.uuid, targetSpecies))
 
-        return when {
-            (config.rulesets.isEmpty()) -> {
-                true
-            }
-
-            (config.rulesets.contains(GLOBAL_RULESET)) -> {
-                debug("$GLOBAL_RULESET ruleset found, checking it first")
-                checkRuleset(GLOBAL_RULESET, player, target) &&
-                    when (config.rulesets.contains(targetSpecies)) {
-                        true -> checkRuleset(targetSpecies, player, target)
-                        false -> true
-                    }
-            }
-
-            (config.rulesets.contains(targetSpecies)) -> {
-                checkRuleset(targetSpecies, player, target)
-            }
-
-            else -> {
-                true
-            }
+        if (config.global != null && config.global!!.enabled && config.global!!.rules.isNotEmpty()) {
+            if (!checkRuleset(config.global!!, player, target)) return false
         }
+
+        val applicable =
+            config.custom.filter {
+                it.key.matches(target) && it.value.enabled && it.value.rules.isNotEmpty()
+            }
+
+        return applicable.isEmpty() ||
+            applicable.any {
+                checkRuleset(it.value, player, target)
+            }
     }
 
     private fun checkRuleset(
-        ruleset: String,
+        ruleset: Ruleset,
         player: ServerPlayer,
         target: PokemonEntity,
-    ): Boolean {
-        val ruleset = config.rulesets[ruleset]!!
-        return when {
-            (!ruleset.enabled) -> {
+    ): Boolean =
+        when {
+            !ruleset.enabled -> {
                 debug("enabled config option is set to false for $ruleset ruleset, skipping")
 
                 true
             }
 
-            (!ruleset.check(target)) -> {
+            !ruleset.check(target) -> {
                 debug("$ruleset ruleset check failed for player ${player.uuid}")
 
                 player.sendSystemMessage(
@@ -182,5 +173,4 @@ object ConditionalRiding {
                 true
             }
         }
-    }
 }
