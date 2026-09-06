@@ -41,6 +41,16 @@ dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
 
+    listOf(
+        "org.graalvm.js:js",
+        "org.graalvm.sdk:graal-sdk",
+        "org.graalvm.regex:regex",
+        "org.graalvm.truffle:truffle-api",
+    ).forEach {
+        modRuntimeOnly("$it:${property("graal_version")}")
+    }
+    modRuntimeOnly("com.ibm.icu:icu4j:${property("icu4j_version")}")
+
     modImplementation("net.fabricmc:fabric-loader:${property("fabric_loader_version")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
 
