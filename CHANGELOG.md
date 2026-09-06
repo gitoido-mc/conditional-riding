@@ -1,3 +1,20 @@
+## [0.1.5] - 2026-09-06
+
+### 🚀 Features
+
+- Added Cobblemon 1.8.0 support
+- Added match_all requirement
+- Added match_one requirement
+
+### 💼 Other
+
+- Ci update + changelog
+
+### 🚜 Refactor
+
+- Config update
+- Riding checks optimization
+
 ## [0.1.4] - 2026-07-06
 
 ### 🚀 Features
