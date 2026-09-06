@@ -37,7 +37,12 @@ class ConfigBuilder private constructor(
             try {
                 val fileReader = FileReader(configFile)
                 config = RidingRequirementAdapter.gson.fromJson(fileReader, ConditionalRidingConfig::class.java)
-                info("found ${config.rulesets.count()} cobblemon riding rulesets")
+                if (config.global != null) {
+                    info("global ruleset loaded")
+                } else {
+                    info("global ruleset absent")
+                }
+                info("found ${config.custom.count()} custom cobblemon riding rulesets")
                 fileReader.close()
             } catch (e: Exception) {
                 LOGGER.error("error reading config file: %s, loading default".format(e.cause?.message))

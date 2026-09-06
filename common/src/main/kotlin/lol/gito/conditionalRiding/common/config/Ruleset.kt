@@ -7,12 +7,16 @@
 
 package lol.gito.conditionalRiding.common.config
 
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.google.gson.annotations.Since
 import lol.gito.conditionalRiding.common.serialization.RidingRequirementAdapter.VERSION_1_2
+import lol.gito.conditionalRiding.common.serialization.RidingRequirementAdapter.VERSION_1_5
 
 data class Ruleset(
+    @Since(VERSION_1_5)
+    val species: PokemonProperties? = null,
     val enabled: Boolean = true,
     @Since(VERSION_1_2)
     val negation: Boolean = false,
