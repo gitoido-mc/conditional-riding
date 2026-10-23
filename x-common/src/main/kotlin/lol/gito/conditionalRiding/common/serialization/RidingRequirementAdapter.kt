@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.adapters.RequirementAdapter
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.requirements.AdvancementRequirement
+import com.cobblemon.mod.common.pokemon.requirements.AnyRequirement
 import com.cobblemon.mod.common.pokemon.requirements.AreaRequirement
 import com.cobblemon.mod.common.pokemon.requirements.BiomeRequirement
 import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
@@ -22,6 +23,7 @@ import com.cobblemon.mod.common.pokemon.requirements.LevelRequirement
 import com.cobblemon.mod.common.pokemon.requirements.MoonPhaseRequirement
 import com.cobblemon.mod.common.pokemon.requirements.MoveSetRequirement
 import com.cobblemon.mod.common.pokemon.requirements.MoveTypeRequirement
+import com.cobblemon.mod.common.pokemon.requirements.NegateRequirement
 import com.cobblemon.mod.common.pokemon.requirements.OwnerHoldsItemRequirement
 import com.cobblemon.mod.common.pokemon.requirements.PartyMemberRequirement
 import com.cobblemon.mod.common.pokemon.requirements.PropertyRangeRequirement
@@ -42,10 +44,9 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import lol.gito.conditionalRiding.common.ConditionalRiding
+import lol.gito.conditionalRiding.common.requirement.AllRequirement
 import lol.gito.conditionalRiding.common.requirement.CosmeticItemRequirement
 import lol.gito.conditionalRiding.common.requirement.MarkObtainedRequirement
-import lol.gito.conditionalRiding.common.requirement.MatchAllRequirement
-import lol.gito.conditionalRiding.common.requirement.MatchOneRequirement
 import lol.gito.conditionalRiding.common.requirement.MinimalHpPercentRequirement
 import lol.gito.conditionalRiding.common.requirement.PermissionNodeRequirement
 import lol.gito.conditionalRiding.common.requirement.RidingStyleRequirement
@@ -65,6 +66,7 @@ object RidingRequirementAdapter : RequirementAdapter {
     private val types = HashBiMap.create<String, KClass<out Requirement>>()
 
     init {
+        this.registerType(NegateRequirement.ADAPTER_VARIANT, NegateRequirement::class)
         this.registerType(AreaRequirement.ADAPTER_VARIANT, AreaRequirement::class)
         this.registerType(BiomeRequirement.ADAPTER_VARIANT, BiomeRequirement::class)
         this.registerType(FriendshipRequirement.ADAPTER_VARIANT, FriendshipRequirement::class)
@@ -88,8 +90,8 @@ object RidingRequirementAdapter : RequirementAdapter {
         this.registerType(MinimalHpPercentRequirement.ADAPTER_VARIANT, MinimalHpPercentRequirement::class)
         this.registerType(RidingStyleRequirement.ADAPTER_VARIANT, RidingStyleRequirement::class)
         this.registerType(MarkObtainedRequirement.ADAPTER_VARIANT, MarkObtainedRequirement::class)
-        this.registerType(MatchOneRequirement.ADAPTER_VARIANT, MatchOneRequirement::class)
-        this.registerType(MatchAllRequirement.ADAPTER_VARIANT, MatchAllRequirement::class)
+        this.registerType(AnyRequirement.ADAPTER_VARIANT, AnyRequirement::class)
+        this.registerType(AllRequirement.ADAPTER_VARIANT, AllRequirement::class)
     }
 
     val gson: Gson by lazy {

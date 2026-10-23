@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  cobblemon: 1.7.3
+  cobblemon: 1.8.0
   project_name: conditional_riding
   curseforge_id: 1489855
   modrinth_id: bS53FEgC
@@ -95,4 +95,4 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
           dependencies: |
-            cobblemon@1.7.3(required){curseforge:687131}{modrinth:MdwFAVRL}
+            cobblemon@${{ env.cobblemon }}(required){curseforge:687131}{modrinth:MdwFAVRL}
