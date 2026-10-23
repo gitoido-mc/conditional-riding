@@ -1,0 +1,67 @@
+[versions]
+java = "21"
+kotlin = "2.4.0"
+shadow = "9.6.1"
+
+# Helpers
+axionRelease = "1.21.2"
+spotless = "8.9.0"
+
+# Minecraft and loader-related versions
+minecraft = "1.21.1"
+fabric-loader = "0.17.2"
+fabric-api = "0.116.6+1.21.1"
+fabric-kotlin = "1.13.12+kotlin.2.4.0"
+neoforge-loader = "21.1.51"
+neoforge-kotlin = "5.12.0"
+mixin-main = "0.17.3+mixin.0.8.7"
+mixin-extras = "0.5.4"
+architectury-dev = "1.17-SNAPSHOT"
+architectury-plugin = "3.5-SNAPSHOT"
+architectury-api = "13.0.8"
+
+# Mod dependencies
+cobblemon = "1.8.2+1.21.1"
+graalvm = "22.3.0"
+icu4j = "71.1"
+
+[libraries]
+# Minecraft libraries
+minecraft = { module = "net.minecraft:minecraft", version.ref = "minecraft" }
+architectury-fabric = { module = "dev.architectury:architectury-fabric", version.ref = "architectury-api" }
+architectury-neoforge = { module = "dev.architectury:architectury-neoforge", version.ref = "architectury-api" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+fabric-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-kotlin" }
+neoforge-loader = { module = "net.neoforged:neoforge", version.ref = "neoforge-loader" }
+neoforge-kotlin = { module = "thedarkcolour:kotlinforforge-neoforge", version.ref = "neoforge-kotlin" }
+mixin-main = { module = "net.fabricmc:sponge-mixin", version.ref = "mixin-main" }
+mixin-extras = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin-extras" }
+graalvm-js = { module = "org.graalvm.js:js", version.ref = "graalvm" }
+graalvm-sdk = { module = "org.graalvm.sdk:graal-sdk", version.ref = "graalvm" }
+graalvm-regex = { module = "org.graalvm.regex:regex", version.ref = "graalvm" }
+graalvm-truffle = { module = "org.graalvm.truffle:truffle-api", version.ref = "graalvm" }
+icu4j = { module = "com.ibm.icu:icu4j", version.ref = "icu4j" }
+
+# Mod dependencies
+cobblemon-common = { module = "com.cobblemon:mod", version.ref = "cobblemon" }
+cobblemon-fabric = { module = "com.cobblemon:fabric", version.ref = "cobblemon" }
+cobblemon-neoforge = { module = "com.cobblemon:neoforge", version.ref = "cobblemon" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+axionRelease = { id = "pl.allegro.tech.build.axion-release", version.ref = "axionRelease" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+cr-root = { id = "cr.root-convention" }
+cr-repositories = { id = "cr.repositories-convention" }
+cr-base = { id = "cr.base-convention" }
+cr-common = { id = "cr.common-convention" }
+
+# Minecraft plugins
+architectury-dev = { id = "dev.architectury.loom-remap", version.ref = "architectury-dev" }
+architectury-plugin = { id = "architectury-plugin", version.ref = "architectury-plugin" }
+
+[bundles]
+common-mixin = ["mixin-main", "mixin-extras"]
+fabric-dev = ["graalvm-js", "graalvm-sdk", "graalvm-regex", "graalvm-truffle", "icu4j"]

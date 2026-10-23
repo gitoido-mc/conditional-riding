@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
-  "id": "conditional_riding",
+  "id": "${mod_id}",
   "version": "${version}",
   "name": "Cobblemon Conditional Riding",
   "description": "Allows to configure ability to ride pokemans via simple config!",
   "authors": [
-    "Gito"
+    "Gito <corpa@gito.lol>"
   ],
   "contact": {
     "issues": "https://github.com/gitoido-mc/conditional-riding/issues",
     "sources": "https://github.com/gitoido-mc/conditional-riding"
   },
   "license": "GPL-3.0-only",
-  "icon": "assets/conditional_riding/icon.png",
+  "icon": "assets/${mod_id}/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -23,7 +23,14 @@
     ]
   },
   "depends": {
-    "minecraft": "1.21.1",
-    "cobblemon": ">=1.7.3 <1.9.0"
+    "java": ">=21",
+    "minecraft": "~${minecraft_version}",
+    "cobblemon": ">=${cobblemon_version} <1.9.0"
+  },
+  "custom": {
+    "mc-publish": {
+      "modrinth": "eF8kqlHd",
+      "curseforge": "1196570"
+    }
   }
 }

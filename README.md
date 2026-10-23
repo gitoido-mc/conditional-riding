@@ -4,7 +4,7 @@
 <div align="center">
   <a href="https://www.curseforge.com/minecraft/mc-mods/conditional-riding-cobblemon" title="Conditional Riding on Curseforge" target="_blank"><img src="https://img.shields.io/curseforge/dt/1489855?style=for-the-badge&logo=curseforge&logoColor=%23F16436&logoSize=auto&label=&labelColor=%23222222&color=%23F16436"/></a>
   <a href="https://modrinth.com/mod/conditional-riding-cobblemon" title="Conditional Riding on Modrinth" target="_blank"><img src="https://img.shields.io/modrinth/dt/bS53FEgC?style=for-the-badge&logo=modrinth&logoColor=%2300AF5C&color=%2300AF5C&logoSize=auto&labelColor=%23222222&label="/></a>
-  <a href="https://gito.lol/docs/#category-conditional-riding" title="Documentation" target="_blank"><img src="https://img.shields.io/badge/docs-v0.1.3-brightgreen?style=for-the-badge&labelColor=%23222222&color=%2300AF5C"></a> 
+  <a href="https://gito.lol/docs/#category-conditional-riding" title="Documentation" target="_blank"><img src="https://img.shields.io/badge/docs-v0.1.5-brightgreen?style=for-the-badge&labelColor=%23222222&color=%2300AF5C"></a> 
   <img alt="GitHub License" src="https://img.shields.io/github/license/gitoido-mc/rad-gyms?style=for-the-badge&logoSize=auto&labelColor=%23222222&color=%2300AF5C">
 </div>
 

@@ -10,12 +10,12 @@ package lol.gito.conditionalRiding.common.requirement
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 
-class MatchOneRequirement(
-    val rules: List<Requirement>,
+class AllRequirement(
+    val requirements: List<Requirement>,
 ) : Requirement {
     companion object {
-        const val ADAPTER_VARIANT = "match_one"
+        const val ADAPTER_VARIANT = "all"
     }
 
-    override fun check(pokemon: Pokemon): Boolean = rules.any { it.check(pokemon) }
+    override fun check(pokemon: Pokemon): Boolean = requirements.all { it.check(pokemon) }
 }

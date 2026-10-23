@@ -6,19 +6,23 @@
  */
 
 // By default, this is how your built jars are called
-rootProject.name = "conditional_riding_multiplatform"
+rootProject.name = "conditional-riding"
 
 pluginManagement {
     repositories {
-        maven("https://maven.fabricmc.net/")
-        maven("https://maven.architectury.dev/")
-        maven("https://maven.neoforged.net/releases/")
+        mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.fabricmc.net/")
+        maven("https://maven.neoforged.net/releases/")
+        maven("https://maven.architectury.dev/")
     }
 }
 
-listOf(
-    "common",
-    "neoforge",
-    "fabric"
-).forEach { include(it)}
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
+includeBuild("gradle/build-logic")
+include("x-common")
+include("x-fabric")
+include("x-neoforge")
