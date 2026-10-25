@@ -7,4 +7,8 @@
 
 package lol.gito.conditionalRiding.common.api
 
-interface ConditionalRidingImplementation
+import java.nio.file.Path
+
+interface ConditionalRidingImplementation {
+    val config: Path
+}

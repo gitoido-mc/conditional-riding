@@ -8,11 +8,10 @@
 package lol.gito.conditionalRiding.common.config
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.pokemon.requirements.HeldItemRequirement
 import com.google.gson.annotations.Since
+import lol.gito.conditionalRiding.common.requirement.PlayerGameModeRequirement
 import lol.gito.conditionalRiding.common.serialization.RidingRequirementAdapter.VERSION_1_1
-import net.minecraft.advancements.critereon.ItemPredicate
-import net.minecraft.world.item.Items
+import net.minecraft.world.level.GameType
 
 data class ConditionalRidingConfig(
     val debug: Boolean = false,
@@ -24,12 +23,7 @@ data class ConditionalRidingConfig(
             message = "conditional_riding.failed_ruleset.global",
             rules =
                 listOf(
-                    HeldItemRequirement(
-                        ItemPredicate.Builder
-                            .item()
-                            .of(Items.SADDLE)
-                            .build(),
-                    ),
+                    PlayerGameModeRequirement(GameType.CREATIVE)
                 ),
         ),
     val custom: Map<PokemonProperties, Ruleset> = emptyMap(),
