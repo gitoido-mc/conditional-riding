@@ -14,7 +14,7 @@ A clear and concise description of what the bug is.
 Steps to reproduce the behavior:
 1. Start a game '...'
 2. Try to interact '....'
-4. Game crashes '...'
+3. Game crashes '...'
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
