@@ -114,8 +114,7 @@ object RidingRequirementAdapter : RequirementAdapter {
             .registerTypeAdapter(
                 ItemPredicate::class.java,
                 ItemConditionWrapperAdapter(ConditionalRiding.server.registryAccess()),
-            )
-            .create()
+            ).create()
     }
 
     override fun <T : Requirement> registerType(
