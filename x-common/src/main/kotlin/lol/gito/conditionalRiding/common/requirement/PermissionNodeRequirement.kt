@@ -18,25 +18,29 @@ import net.minecraft.server.level.ServerPlayer
 class PermissionNodeRequirement(
     val node: String = "conditional_riding.can_ride",
 ) : PlayerRequesterAwareRequirement {
-    override fun check(player: ServerPlayer, pokemon: Pokemon): Boolean = when {
-        (!pokemon.isPlayerOwned()) -> {
-            false
-        }
+    override fun check(
+        player: ServerPlayer,
+        pokemon: Pokemon,
+    ): Boolean =
+        when {
+            (!pokemon.isPlayerOwned()) -> {
+                false
+            }
 
-        (pokemon.getOwnerPlayer() == null) -> {
-            false
-        }
+            (pokemon.getOwnerPlayer() == null) -> {
+                false
+            }
 
-        else -> {
-            val permission =
-                RidingPermission(
-                    ResourceLocation.fromNamespaceAndPath(MOD_ID, node.replace('.', '/')),
-                    node,
-                )
+            else -> {
+                val permission =
+                    RidingPermission(
+                        ResourceLocation.fromNamespaceAndPath(MOD_ID, node.replace('.', '/')),
+                        node,
+                    )
 
-            return Cobblemon.permissionValidator.hasPermission(player, permission)
+                return Cobblemon.permissionValidator.hasPermission(player, permission)
+            }
         }
-    }
 
     companion object {
         const val ADAPTER_VARIANT = "permission_node"

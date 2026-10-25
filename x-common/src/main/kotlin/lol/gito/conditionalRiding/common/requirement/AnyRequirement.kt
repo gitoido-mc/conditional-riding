@@ -19,7 +19,10 @@ class AnyRequirement(
         const val ADAPTER_VARIANT = "match_any"
     }
 
-    override fun check(player: ServerPlayer, pokemon: Pokemon): Boolean {
+    override fun check(
+        player: ServerPlayer,
+        pokemon: Pokemon,
+    ): Boolean {
         val forPlayer = requirements.filterIsInstance<PlayerRequesterAwareRequirement>().any { it.check(player, pokemon) }
         val defaults = requirements.filterNot { it is PlayerRequesterAwareRequirement }.any { it.check(pokemon) }
         return forPlayer || defaults
