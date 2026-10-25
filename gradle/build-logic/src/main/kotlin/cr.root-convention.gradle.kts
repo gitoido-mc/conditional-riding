@@ -18,16 +18,6 @@ scmVersion {
     releaseBranchNames = listOf("main")
     versionCreator("simple")
 
-    tag {
-        prefix = libs.versions.cobblemon.get().split("+").first().plus("+")
-        fallbackPrefixes = listOf(
-            "1.7.3+",
-            "1.8.0+",
-            "1.8.1+",
-            "1.8.2+",
-        )
-    }
-
     branchVersionCreator.put("hotfix/.*", "simple")
     branchVersionCreator.put(
         "release/.*",
