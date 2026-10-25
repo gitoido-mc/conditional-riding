@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.adapters.RequirementAdapter
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.requirements.AdvancementRequirement
-import com.cobblemon.mod.common.pokemon.requirements.AnyRequirement
 import com.cobblemon.mod.common.pokemon.requirements.AreaRequirement
 import com.cobblemon.mod.common.pokemon.requirements.BiomeRequirement
 import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
@@ -23,7 +22,6 @@ import com.cobblemon.mod.common.pokemon.requirements.LevelRequirement
 import com.cobblemon.mod.common.pokemon.requirements.MoonPhaseRequirement
 import com.cobblemon.mod.common.pokemon.requirements.MoveSetRequirement
 import com.cobblemon.mod.common.pokemon.requirements.MoveTypeRequirement
-import com.cobblemon.mod.common.pokemon.requirements.NegateRequirement
 import com.cobblemon.mod.common.pokemon.requirements.OwnerHoldsItemRequirement
 import com.cobblemon.mod.common.pokemon.requirements.PartyMemberRequirement
 import com.cobblemon.mod.common.pokemon.requirements.PropertyRangeRequirement
@@ -45,10 +43,14 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.requirement.AllRequirement
+import lol.gito.conditionalRiding.common.requirement.AnyRequirement
 import lol.gito.conditionalRiding.common.requirement.CosmeticItemRequirement
 import lol.gito.conditionalRiding.common.requirement.MarkObtainedRequirement
 import lol.gito.conditionalRiding.common.requirement.MinimalHpPercentRequirement
+import lol.gito.conditionalRiding.common.requirement.NegateRequirement
 import lol.gito.conditionalRiding.common.requirement.PermissionNodeRequirement
+import lol.gito.conditionalRiding.common.requirement.PlayerGameModeRequirement
+import lol.gito.conditionalRiding.common.requirement.PlayerHoldsItemRequirement
 import lol.gito.conditionalRiding.common.requirement.RidingStyleRequirement
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.resources.ResourceLocation
@@ -60,13 +62,13 @@ object RidingRequirementAdapter : RequirementAdapter {
     const val VERSION_1_1 = 1.1
     const val VERSION_1_2 = 1.2
     const val VERSION_1_5 = 1.5
+    const val VERSION_2_0 = 2.0
 
     private const val VARIANT = "variant"
 
-    private val types = HashBiMap.create<String, KClass<out Requirement>>()
+    private val types = HashBiMap.create<String, KClass<Requirement>>()
 
     init {
-        this.registerType(NegateRequirement.ADAPTER_VARIANT, NegateRequirement::class)
         this.registerType(AreaRequirement.ADAPTER_VARIANT, AreaRequirement::class)
         this.registerType(BiomeRequirement.ADAPTER_VARIANT, BiomeRequirement::class)
         this.registerType(FriendshipRequirement.ADAPTER_VARIANT, FriendshipRequirement::class)
@@ -92,23 +94,27 @@ object RidingRequirementAdapter : RequirementAdapter {
         this.registerType(MarkObtainedRequirement.ADAPTER_VARIANT, MarkObtainedRequirement::class)
         this.registerType(AnyRequirement.ADAPTER_VARIANT, AnyRequirement::class)
         this.registerType(AllRequirement.ADAPTER_VARIANT, AllRequirement::class)
+        this.registerType(NegateRequirement.ADAPTER_VARIANT, NegateRequirement::class)
+        this.registerType(PlayerHoldsItemRequirement.ADAPTER_VARIANT, PlayerHoldsItemRequirement::class)
+        this.registerType(PlayerGameModeRequirement.ADAPTER_VARIANT, PlayerGameModeRequirement::class)
     }
 
     val gson: Gson by lazy {
         GsonBuilder()
+            .setPrettyPrinting()
+            .setVersion(VERSION_2_0)
             .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
             .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-            .registerTypeAdapter(
-                ItemPredicate::class.java,
-                ItemConditionWrapperAdapter(ConditionalRiding.server.registryAccess()),
-            ).registerTypeAdapter(Requirement::class.java, RidingRequirementAdapter)
+            .registerTypeAdapter(Requirement::class.java, RidingRequirementAdapter)
             .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
             .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
             .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
             .registerTypeAdapterFactory(OptionalTypeAdapterFactory())
             .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
-            .setPrettyPrinting()
-            .setVersion(VERSION_1_5)
+            .registerTypeAdapter(
+                ItemPredicate::class.java,
+                ItemConditionWrapperAdapter(ConditionalRiding.server.registryAccess()),
+            )
             .create()
     }
 
@@ -116,7 +122,7 @@ object RidingRequirementAdapter : RequirementAdapter {
         id: String,
         type: KClass<T>,
     ) {
-        this.types[id.lowercase()] = type
+        this.types[id.lowercase()] = type as KClass<Requirement>
     }
 
     override fun deserialize(
