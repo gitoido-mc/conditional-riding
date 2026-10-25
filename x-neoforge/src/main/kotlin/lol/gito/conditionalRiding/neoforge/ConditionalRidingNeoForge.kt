@@ -12,12 +12,16 @@ import lol.gito.conditionalRiding.common.ConditionalRiding.MOD_ID
 import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
+import net.neoforged.fml.loading.FMLPaths
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.RegisterCommandsEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
+import java.nio.file.Path
 
 @Mod(MOD_ID)
 object ConditionalRidingNeoForge : ConditionalRidingImplementation {
+    override val config: Path = FMLPaths.CONFIGDIR.get().resolve("${ConditionalRiding.CONFIG_NAME}.json")
+
     init {
         with(MOD_BUS) {
             addListener { _: FMLCommonSetupEvent ->

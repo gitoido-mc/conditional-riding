@@ -11,9 +11,11 @@ import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.ConditionalRiding.LOGGER
 import lol.gito.conditionalRiding.common.ConditionalRiding.info
 import lol.gito.conditionalRiding.common.serialization.RidingRequirementAdapter
-import java.io.File
 import java.io.FileReader
 import java.io.PrintWriter
+import java.nio.file.Path
+import kotlin.io.path.createFile
+import kotlin.io.path.exists
 
 /**
  * Config builder class yoinked and adapted from Tim Core
@@ -22,20 +24,18 @@ import java.io.PrintWriter
  *
  */
 class ConfigBuilder private constructor(
-    private val path: String,
+    private val path: Path,
 ) {
     companion object {
-        fun load(path: String): ConditionalRidingConfig = ConfigBuilder(path).load()
+        fun load(path: Path): ConditionalRidingConfig = ConfigBuilder(path).load()
     }
 
     private fun load(): ConditionalRidingConfig {
         var config = ConditionalRidingConfig()
-        val configFile = File("config/$path.json")
-        configFile.parentFile.mkdirs()
 
-        if (configFile.exists()) {
+        if (path.exists()) {
             try {
-                val fileReader = FileReader(configFile)
+                val fileReader = FileReader(path.toFile())
                 config = RidingRequirementAdapter.gson.fromJson(fileReader, ConditionalRidingConfig::class.java)
                 if (config.global != null) {
                     info("global ruleset loaded")
@@ -55,9 +55,9 @@ class ConfigBuilder private constructor(
         }
 
         try {
-            if (!configFile.exists()) {
-                configFile.createNewFile()
-                val pw = PrintWriter(configFile)
+            if (!path.exists()) {
+                path.createFile()
+                val pw = PrintWriter(path.toFile())
                 RidingRequirementAdapter.gson.toJson(ConditionalRidingConfig(), pw)
                 pw.close()
             }
