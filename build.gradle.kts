@@ -5,8 +5,6 @@
  * you can obtain one at https://github.com/gitoido-mc/conditional-riding/blob/main/LICENSE.
  */
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.cr.root)
 }
