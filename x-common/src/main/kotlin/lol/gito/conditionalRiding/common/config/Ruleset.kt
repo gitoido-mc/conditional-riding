@@ -11,8 +11,10 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.google.gson.annotations.Since
+import lol.gito.conditionalRiding.common.api.requirement.PlayerRequesterAwareRequirement
 import lol.gito.conditionalRiding.common.serialization.RidingRequirementAdapter.VERSION_1_2
 import lol.gito.conditionalRiding.common.serialization.RidingRequirementAdapter.VERSION_1_5
+import net.minecraft.server.level.ServerPlayer
 
 data class Ruleset(
     @Since(VERSION_1_5)
@@ -23,9 +25,25 @@ data class Ruleset(
     val message: String = "conditional_riding.failed_ruleset.generic",
     val rules: List<Requirement> = emptyList(),
 ) {
-    fun check(target: PokemonEntity): Boolean =
+    fun check(
+        player: ServerPlayer,
+        target: PokemonEntity,
+    ): Boolean =
         when (negation) {
-            true -> !this.rules.all { requirement -> requirement.check(target.pokemon) }
-            else -> this.rules.all { requirement -> requirement.check(target.pokemon) }
+            true -> !(checkPlayerAware(player, target) && checkCommon(target))
+            false -> checkPlayerAware(player, target) && checkCommon(target)
         }
+
+    private fun checkPlayerAware(
+        player: ServerPlayer,
+        target: PokemonEntity,
+    ): Boolean =
+        this.rules
+            .filterIsInstance<PlayerRequesterAwareRequirement>() // smart cast
+            .all { requirement -> requirement.check(player, target.pokemon) }
+
+    private fun checkCommon(target: PokemonEntity): Boolean =
+        this.rules
+            .filterNot { it is PlayerRequesterAwareRequirement }
+            .all { requirement -> requirement.check(target.pokemon) }
 }

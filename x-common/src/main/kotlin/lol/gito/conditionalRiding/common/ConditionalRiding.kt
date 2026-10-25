@@ -106,7 +106,7 @@ object ConditionalRiding {
     @Suppress("unused")
     fun loadConfig(event: ServerEvent.Started?) {
         info("loading config")
-        config = ConfigBuilder.load(CONFIG_NAME)
+        config = ConfigBuilder.load(implementation.config)
         if (config.debug) debug("debug option enabled, expect increased log spam")
         if (config.enabled) {
             if (config.global != null) info("global ruleset loaded")
@@ -156,7 +156,7 @@ object ConditionalRiding {
                 true
             }
 
-            !ruleset.check(target) -> {
+            !ruleset.check(player, target) -> {
                 debug("$ruleset ruleset check failed for player ${player.uuid}")
 
                 player.sendSystemMessage(

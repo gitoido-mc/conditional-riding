@@ -11,10 +11,14 @@ import lol.gito.conditionalRiding.common.ConditionalRiding
 import lol.gito.conditionalRiding.common.api.ConditionalRidingImplementation
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.fabricmc.loader.api.FabricLoader
+import java.nio.file.Path
 
 object ConditionalRidingFabric : ModInitializer, ConditionalRidingImplementation {
     override fun onInitialize() {
         ConditionalRiding.initialize(this)
         CommandRegistrationCallback.EVENT.register(ConditionalRiding.Commands::register)
     }
+
+    override val config: Path = FabricLoader.getInstance().configDir.resolve("${ConditionalRiding.CONFIG_NAME}.json")
 }
