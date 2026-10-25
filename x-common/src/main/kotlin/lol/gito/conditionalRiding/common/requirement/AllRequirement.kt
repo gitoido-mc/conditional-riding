@@ -9,13 +9,19 @@ package lol.gito.conditionalRiding.common.requirement
 
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
+import lol.gito.conditionalRiding.common.api.requirement.PlayerRequesterAwareRequirement
+import net.minecraft.server.level.ServerPlayer
 
 class AllRequirement(
     val requirements: List<Requirement>,
-) : Requirement {
+) : PlayerRequesterAwareRequirement {
     companion object {
-        const val ADAPTER_VARIANT = "all"
+        const val ADAPTER_VARIANT = "match_all"
     }
 
-    override fun check(pokemon: Pokemon): Boolean = requirements.all { it.check(pokemon) }
+    override fun check(player: ServerPlayer, pokemon: Pokemon): Boolean {
+        val forPlayer = requirements.filterIsInstance<PlayerRequesterAwareRequirement>().all { it.check(player, pokemon) }
+        val defaults = requirements.filterNot { it is PlayerRequesterAwareRequirement }.all { it.check(pokemon) }
+        return forPlayer && defaults
+    }
 }
