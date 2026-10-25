@@ -11,10 +11,18 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import lol.gito.conditionalRiding.common.api.requirement.PlayerRequesterAwareRequirement
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.Items
 
 class PlayerHoldsItemRequirement(
     val itemCondition: ItemPredicate,
 ) : PlayerRequesterAwareRequirement {
+    constructor() : this(
+        ItemPredicate.Builder
+            .item()
+            .of(Items.EGG)
+            .build(),
+    )
+
     override fun check(
         player: ServerPlayer,
         pokemon: Pokemon,
