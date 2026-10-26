@@ -7,10 +7,11 @@ on:
   workflow_dispatch:
 
 env:
-  cobblemon: 1.8.0
-  project_name: conditional_riding
+  project_slug: conditional_riding
   curseforge_id: 1489855
   modrinth_id: bS53FEgC
+  minecraft: 1.21.1
+  cobblemon: 1.8.3
 
 jobs:
   build:
@@ -24,69 +25,48 @@ jobs:
         java: [
           21,    # Current Java LTS
         ]
-    outputs:
-      version: ${{ steps.version.outputs.MOD_VERSION }}
+        loader: [
+          fabric,
+          neoforge,
+          common
+        ]
     steps:
-      - name: Checkout repository
+      - name: Setup workspace
         uses: actions/checkout@v7
-      - name: Validate gradle wrapper
-        uses: gradle/actions/wrapper-validation@v6
       - name: Setup jdk ${{ matrix.java }}
         uses: actions/setup-java@v6
         with:
           java-version: ${{ matrix.java }}
           distribution: 'temurin'
+      - name: Validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+      - name: Setup gradle
+        uses: gradle/actions/setup-gradle@v6
       - name: Build
-        uses: burrunan/gradle-cache-action@v3
-        with:
-          read-only: true
-          arguments: build
+        env:
+          LOADER: ${{ matrix.loader }}
+        run: ./gradlew :x-${{ matrix.loader }}:build
       - name: Save version output
         id: version
-        run: echo "MOD_VERSION=$(gradle currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
-      - name: Capture build artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: artifacts
-          path: |
-            fabric/build/libs/conditional_riding-fabric-${{ steps.version.outputs.MOD_VERSION }}.jar
-            fabric/build/libs/conditional_riding-fabric-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
-            neoforge/build/libs/conditional_riding-neoforge-${{ steps.version.outputs.MOD_VERSION }}.jar
-            neoforge/build/libs/conditional_riding-neoforge-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
-
-  publish:
-    name: "Publish artifacts on platforms"
-    needs: build
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        loader: [
-          fabric,
-          neoforge,
-        ]
-    steps:
-      - name: Retrieve build artifacts
-        uses: actions/download-artifact@v8
-        with:
-          name: artifacts
-      - name: Display structure of downloaded files
-        if: github.event_name == 'workflow_dispatch'
-        run: ls -R
-      - name: Publish ${{ matrix.loader }} version (CurseForge/Modrinth)
-        if: github.event_name == 'release'
+        run: echo "MOD_VERSION=$(./gradlew currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
+      - name: "Publish on platforms"
+        if: github.event_name == 'release' && matrix.loader != 'common'
         uses: Kira-NT/mc-publish@v3.3
         with:
-          name: "Conditional Riding ${{ needs.build.outputs.version }} for Cobblemon ${{ env.cobblemon }}"
-          java: 21
-          game-versions: 1.21.1
+          name: "Rad Gyms ${{ steps.version.outputs.MOD_VERSION }} for Cobblemon ${{ env.cobblemon }}"
+          java: ${{ matrix.java }}
+          game-versions: ${{ env.minecraft }}
           loaders: ${{ matrix.loader }}
 
           files: |
-            ${{ matrix.loader }}/build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}.jar
-            ${{ matrix.loader }}/build/libs/${{ env.project_name }}-${{ matrix.loader }}-${{ needs.build.outputs.version }}-sources.jar
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
 
-          version: "${{ env.cobblemon }}_${{ needs.build.outputs.version }}"
+          version: "${{ env.cobblemon }}_${{ steps.version.outputs.MOD_VERSION }}"
           version-type: release
+          environment: client | server
+
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
           curseforge-id: ${{ env.curseforge_id }}
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
@@ -96,3 +76,19 @@ jobs:
 
           dependencies: |
             cobblemon@${{ env.cobblemon }}(required){curseforge:687131}{modrinth:MdwFAVRL}
+
+      - name: "Publish on GitHub"
+        if: github.event_name == 'workflow_dispatch'
+        uses: Kira-NT/mc-publish@v3.3
+        with:
+          name: "Nightly ${{ steps.version.outputs.MOD_VERSION }}"
+          java: ${{ matrix.java }}
+          game-versions: ${{ env.minecraft }}
+          loaders: ${{ matrix.loader }}
+
+          github-prerelease: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-tag: 'nightly'
+          files: |
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
