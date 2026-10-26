@@ -53,7 +53,7 @@ jobs:
         if: github.event_name == 'release' && matrix.loader != 'common'
         uses: Kira-NT/mc-publish@v3.3
         with:
-          name: "Rad Gyms ${{ steps.version.outputs.MOD_VERSION }} for Cobblemon ${{ env.cobblemon }}"
+          name: "Conditional Riding ${{ steps.version.outputs.MOD_VERSION }} for Cobblemon ${{ env.cobblemon }}"
           java: ${{ matrix.java }}
           game-versions: ${{ env.minecraft }}
           loaders: ${{ matrix.loader }}
@@ -78,7 +78,6 @@ jobs:
             cobblemon@${{ env.cobblemon }}(required){curseforge:687131}{modrinth:MdwFAVRL}
 
       - name: "Publish on GitHub"
-        if: github.event_name == 'workflow_dispatch'
         uses: Kira-NT/mc-publish@v3.3
         with:
           name: "Nightly ${{ steps.version.outputs.MOD_VERSION }}"
