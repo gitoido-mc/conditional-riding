@@ -24,5 +24,9 @@ plugins {
 
 includeBuild("gradle/build-logic")
 include("x-common")
-include("x-fabric")
-include("x-neoforge")
+if ((System.getenv("CI") != null && System.getenv("LOADER") == "fabric") || System.getenv("CI") == null) {
+    include("x-fabric")
+}
+if ((System.getenv("CI") != null && System.getenv("LOADER") == "neoforge") || System.getenv("CI") == null) {
+    include("x-neoforge")
+}

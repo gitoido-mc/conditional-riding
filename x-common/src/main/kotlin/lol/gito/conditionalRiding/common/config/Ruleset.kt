@@ -40,10 +40,14 @@ data class Ruleset(
     ): Boolean =
         this.rules
             .filterIsInstance<PlayerRequesterAwareRequirement>() // smart cast
-            .all { requirement -> requirement.check(player, target.pokemon) }
+            .all { requirement ->
+                requirement.check(player, target.pokemon)
+            }
 
     private fun checkCommon(target: PokemonEntity): Boolean =
         this.rules
             .filterNot { it is PlayerRequesterAwareRequirement }
-            .all { requirement -> requirement.check(target.pokemon) }
+            .all { requirement ->
+                requirement.check(target.pokemon)
+            }
 }
