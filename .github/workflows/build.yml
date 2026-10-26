@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  project_slug: conditional_riding
+  project_slug: conditional-riding
   curseforge_id: 1489855
   modrinth_id: bS53FEgC
   minecraft: 1.21.1
