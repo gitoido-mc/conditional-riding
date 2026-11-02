@@ -19,6 +19,9 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: write
+    env:
+      CCM_USER: ${{ secrets.CCM_USER }}
+      CCM_PASS: ${{ secrets.CCM_PASS }}
     strategy:
       matrix:
         # Use these Java versions
@@ -49,8 +52,6 @@ jobs:
       - name: Publish on Cobbled Creators Maven
         env:
           LOADER: ${{ matrix.loader }}
-          CCM_USER: ${{ secrets.CCM_USER }}
-          CCM_PASS: ${{ secrets.CCM_PASS }}
         run: ./gradlew :x-${{ matrix.loader }}:publish
       - name: Save version output
         id: version

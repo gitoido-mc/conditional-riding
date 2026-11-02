@@ -15,7 +15,7 @@ publishing {
         maven {
             val repo = if (scmVersion.versionProvider().get().isSnapshot) "snapshots" else "releases"
 
-            if ( System.getenv("CCM_USER") == null || System.getenv("CCM_PASS") == null) {
+            if (System.getenv("CCM_USER") == null || System.getenv("CCM_PASS") == null) {
                 throw RuntimeException("Did you forget your publication credentials?")
             }
 

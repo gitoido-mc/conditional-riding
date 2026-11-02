@@ -67,7 +67,7 @@ and this project adheres to [ZeroVer](https://0ver.org).
 ### New Contributors
 * @gitoido made their first contribution
 
-[unreleased]: https://github.com/gitoido-mc/conditional-riding/compare/v0.1.5...HEAD
+[0.2.0]: https://github.com/gitoido-mc/conditional-riding/compare/v0.1.5...v0.2.0
 [0.1.5]: https://github.com/gitoido-mc/conditional-riding/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/gitoido-mc/conditional-riding/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/gitoido-mc/conditional-riding/compare/v0.1.2...v0.1.3
