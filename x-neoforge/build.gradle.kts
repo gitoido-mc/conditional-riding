@@ -60,23 +60,6 @@ dependencies {
 }
 
 tasks {
-    processResources {
-
-        inputs.property("version", project.version)
-
-        filesMatching("META-INF/neoforge.mods.toml") {
-            expand(
-                mapOf(
-                    "version" to project.version,
-                    "mod_id" to project.property("mod_id"),
-                    "minecraft_version" to libs.versions.minecraft.get(),
-                    "neoforge_version" to libs.versions.neoforge.loader.get(),
-                    "cobblemon_version" to libs.versions.cobblemon.get().split("+").first()
-                ),
-            )
-        }
-    }
-
     jar {
         archiveBaseName.set("${rootProject.name}-${project.name}")
         archiveVersion.set("${rootProject.version}")
@@ -84,10 +67,9 @@ tasks {
     }
 
     shadowJar {
-        exclude("fabric.mod.json")
-        exclude("architectury.common.json")
-
         configurations = listOf(shadowCommon)
+
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         archiveBaseName.set("${rootProject.name}-${project.name}")
         archiveVersion.set("${project.version}")

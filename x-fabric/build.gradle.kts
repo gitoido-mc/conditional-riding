@@ -59,24 +59,10 @@ dependencies {
 }
 
 tasks {
-    processResources {
-        inputs.property("version", project.version)
-
-        filesMatching("fabric.mod.json") {
-            expand(
-                mapOf(
-                    "version" to project.version,
-                    "mod_id" to project.property("mod_id"),
-                    "minecraft_version" to libs.versions.minecraft.get(),
-                    "fabric_loader_version" to libs.versions.fabric.loader.get(),
-                    "cobblemon_version" to libs.versions.cobblemon.get().split("+").first()
-                ),
-            )
-        }
-    }
-
     shadowJar {
         configurations = listOf(shadowCommon)
+
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         archiveBaseName.set("${rootProject.name}-${project.name}")
         archiveVersion.set("${project.version}")

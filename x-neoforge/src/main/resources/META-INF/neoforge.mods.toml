@@ -1,35 +1,35 @@
 modLoader = "kotlinforforge"
-loaderVersion = "[5.10,)"
+loaderVersion = "[${neoforge_kotlin_version},)"
 issueTrackerURL = "https://github.com/gitoido-mc/conditional-riding/issues"
 license = '''GPL-3.0-only'''
 
 [[mods]]
-modId = "conditional_riding"
+modId = "${mod_id}"
 version = "${version}"
-displayName = "Cobblemon Conditional Riding"
+displayName = "Conditional Riding for Cobblemon"
 authors = "Gito"
 description = '''
 Allows to configure ability to ride pokemans via simple config!
 '''
-logoFile = "assets/conditional_riding/icon.png"
+logoFile = "assets/${mod_id}/icon.png"
 
-[[dependencies.conditional_riding]]
+[[dependencies.${mod_id}]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.21.1]"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.conditional_riding]]
+[[dependencies.${mod_id}]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[21.1.195,)"
+versionRange = "[${neoforge_loader_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.conditional_riding]]
+[[dependencies.${mod_id}]]
 modId = "cobblemon"
 mandatory = true
-versionRange = "[1.8.2,1.9.0)"
+versionRange = "[${cobblemon_version},1.9.0)"
 ordering = "AFTER"
 side = "BOTH"

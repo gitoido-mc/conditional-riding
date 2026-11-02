@@ -26,9 +26,9 @@ jobs:
           21,    # Current Java LTS
         ]
         loader: [
+          common,
           fabric,
           neoforge,
-          common
         ]
     steps:
       - name: Setup workspace
@@ -46,6 +46,12 @@ jobs:
         env:
           LOADER: ${{ matrix.loader }}
         run: ./gradlew :x-${{ matrix.loader }}:build
+      - name: Publish
+        env:
+          LOADER: ${{ matrix.loader }}
+          CCM_USER: ${{ secrets.CCM_USER }}
+          CCM_PASS: ${{ secrets.CCM_PASS }}
+        run: ./gradlew :x-${{ matrix.loader }}:publish
       - name: Save version output
         id: version
         run: echo "MOD_VERSION=$(./gradlew currentVersion -q -Prelease.quiet)" >> "$GITHUB_OUTPUT"
@@ -78,6 +84,26 @@ jobs:
             cobblemon@${{ env.cobblemon }}(required){curseforge:687131}{modrinth:MdwFAVRL}
 
       - name: "Publish on GitHub"
+        if: github.event_name == 'release'
+        uses: Kira-NT/mc-publish@v3.3
+        with:
+          name: "Conditional Riding ${{ steps.version.outputs.MOD_VERSION }} for Cobblemon ${{ env.cobblemon }}"
+          java: ${{ matrix.java }}
+          game-versions: ${{ env.minecraft }}
+          loaders: ${{ matrix.loader }}
+
+          files: |
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}.jar
+            ./x-${{matrix.loader}}/build/libs/${{ env.project_slug }}-${{ matrix.loader }}-${{ steps.version.outputs.MOD_VERSION }}-sources.jar
+
+          version: "${{ env.cobblemon }}_${{ steps.version.outputs.MOD_VERSION }}"
+          version-type: release
+          environment: client | server
+
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Publish on GitHub"
+        if: github.event_name != 'release'
         uses: Kira-NT/mc-publish@v3.3
         with:
           name: "Nightly ${{ steps.version.outputs.MOD_VERSION }}"

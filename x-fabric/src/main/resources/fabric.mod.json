@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "${mod_id}",
   "version": "${version}",
-  "name": "Cobblemon Conditional Riding",
+  "name": "Conditional Riding for Cobblemon",
   "description": "Allows to configure ability to ride pokemans via simple config!",
   "authors": [
     "Gito <corpa@gito.lol>"

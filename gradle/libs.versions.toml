@@ -55,6 +55,7 @@ axionRelease = { id = "pl.allegro.tech.build.axion-release", version.ref = "axio
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 cr-root = { id = "cr.root-convention" }
 cr-repositories = { id = "cr.repositories-convention" }
+cr-publication = { id = "cr.publication-convention" }
 cr-base = { id = "cr.base-convention" }
 cr-common = { id = "cr.common-convention" }
 

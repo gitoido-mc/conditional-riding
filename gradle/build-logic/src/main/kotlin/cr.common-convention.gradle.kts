@@ -8,6 +8,7 @@
 plugins {
     id("java")
     alias(libs.plugins.cr.base)
+    alias(libs.plugins.cr.publication)
     alias(libs.plugins.architectury.dev)
     alias(libs.plugins.architectury.plugin)
 }
@@ -23,7 +24,23 @@ dependencies {
 
 tasks {
     processResources {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        inputs.property("version", project.version)
+
+        filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml")) {
+            expand(
+                mapOf(
+                    "version" to project.version,
+                    "mod_id" to project.property("mod_id"),
+                    "minecraft_version" to libs.versions.minecraft.get(),
+                    "neoforge_loader_version" to libs.versions.neoforge.loader.get(),
+                    "neoforge_kotlin_version" to libs.versions.neoforge.kotlin.get(),
+                    "fabric_loader_version" to libs.versions.fabric.loader.get(),
+                    "fabric_kotlin_version" to libs.versions.fabric.kotlin.get(),
+                    "fabric_api_version" to libs.versions.fabric.api.get(),
+                    "cobblemon_version" to libs.versions.cobblemon.get().split("+").first()
+                ),
+            )
+        }
     }
 
     remapJar {
