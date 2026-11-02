@@ -52,6 +52,7 @@ jobs:
       - name: Publish on Cobbled Creators Maven
         env:
           LOADER: ${{ matrix.loader }}
+          IS_SNAPSHOT: ${{ github.event_name != 'release' && 1 || 0 }}
         run: ./gradlew :x-${{ matrix.loader }}:publish
       - name: Save version output
         id: version

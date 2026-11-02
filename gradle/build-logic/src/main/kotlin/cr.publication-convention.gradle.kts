@@ -1,6 +1,5 @@
 plugins {
     `maven-publish`
-    alias(libs.plugins.cr.root)
 }
 
 publishing {
@@ -13,7 +12,9 @@ publishing {
 
     repositories {
         maven {
-            val repo = if (scmVersion.versionProvider().get().isSnapshot) "snapshots" else "releases"
+            val repo = if (
+                System.getenv("IS_SNAPSHOT") == null || System.getenv("IS_SNAPSHOT").toInt() == 0
+            ) "releases" else "snapshots"
 
             if (System.getenv("CCM_USER") == null || System.getenv("CCM_PASS") == null) {
                 throw RuntimeException("Did you forget your publication credentials?")
